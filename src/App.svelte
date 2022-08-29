@@ -569,14 +569,26 @@
       this._end_turn();
     }
 
+    _end_frame() {
+      this.num_frames++;
+
+      for (let p of this.players) {
+	if (p.pos == 0)
+	  p.frame_3rd++;
+	else if (p.pos == 1)
+	  p.frame_2nd++;
+	else
+	  p.frame_1st++;
+      }
+    }
+
     can_new_frame() {
       return this._is_frame_over();
     }
 
     new_frame() {
-      this.num_frames++;
-
-      // FIXME
+      // FIXME: this should happen earlier, when frame is over
+      this._end_frame();
 
       // game
       this.cur_perm++;

@@ -825,7 +825,7 @@
   // ui main states
   const UiState = {
     UI_START: 0,
-    UI_MAIN: 1,
+    UI_PLAY: 1,
     UI_MORE: 2,
     UI_EDIT: 3,
   };
@@ -847,7 +847,7 @@
 
     update_frame_time();
 
-    ui_main_state = UiState.UI_MAIN;
+    ui_main_state = UiState.UI_PLAY;
   }
 
   function ui_start_name_valid(name) {
@@ -874,13 +874,13 @@
 
     update_frame_time();
 
-    ui_main_state = UiState.UI_MAIN;
+    ui_main_state = UiState.UI_PLAY;
   }
 
   function ui_next_state() {
     ui_main_state++;
     if (ui_main_state > UiState.UI_EDIT)
-      ui_main_state = UiState.UI_MAIN;
+      ui_main_state = UiState.UI_PLAY;
   }
 
   // ui actions, each need to handle undo
@@ -1011,7 +1011,7 @@
 
     </div>
 
-  {:else if ui_main_state == UiState.UI_MAIN }
+  {:else if ui_main_state == UiState.UI_PLAY }
     <div class='grid-container'>
       <div class='player' on:click={ui_next_state}>
 	<div>{frame_time}</div>

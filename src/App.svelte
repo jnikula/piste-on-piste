@@ -936,6 +936,17 @@
     state = undo_stack_push(s);
   }
 
+  function ui_new_frame() {
+    if (!state.can_new_frame())
+      return;
+
+    let s = state.deepcopy();
+    s.new_frame();
+    state = undo_stack_push(s);
+
+    ui_main_state = UiState.UI_PLAY;
+  }
+
   function ui_border_style(player) {
     if (state._is_frame_over()) {
       if (player.winner)
@@ -1108,12 +1119,18 @@
 	</div>
       {/each}
 
-      <div class='player player-stat'>
+      <div class='player player-stat' on:click={ui_new_frame}>
 	<div>Frame time</div>
 	<div>Frame balls</div>
 	<div>Frame high</div>
 	<div>Game balls</div>
 	<div>Game high</div>
+	<div></div>
+	{#if state.can_new_frame() }
+	  <div class='player-button active-button'>New frame</div>
+	{:else}
+	  <div class='player-button'></div>
+	{/if}
       </div>
       {#each state.get_players() as player (player.pid)}
       <div class='player player-stat'>

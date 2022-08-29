@@ -922,7 +922,7 @@
     state = undo_stack_push(s);
   }
 
-  function ui_click_player_advanced(player) {
+  function ui_click_player_more(player) {
     let s = state.deepcopy();
 
     // FIXME: don't duplicate the conditions here and in html
@@ -1089,7 +1089,7 @@
 	<div class='player-button active-button'>Advanced</div>
       </div>
       {#each state.get_players() as player (player.pid)}
-	<div class='player {ui_border_style(player)}'>
+	<div class='player {ui_border_style(player)}' on:click={() => ui_click_player_more(player)}>
 	  <div>{player.name}</div>
 	  <div>{player.frame_1st} - {player.frame_2nd} - {player.frame_3rd}</div>
 	  <div class='player-points'>{player.points}</div>
@@ -1098,7 +1098,13 @@
 	  {:else}
 	    <div class='player-break'><Break balls={player._last_break}></Break></div>
 	  {/if}
-	  <div class='player-button'></div>
+	  {#if state.can_concede(player.pid) }
+	    <div class='player-button active-button'>Concede</div>
+	  {:else if state.can_declare_winner(player.pid) }
+	    <div class='player-button active-button'>Set Winner</div>
+	  {:else}
+	    <div class='player-button'></div>
+	  {/if}
 	</div>
       {/each}
 
@@ -1132,7 +1138,7 @@
 	<div class='player-button active-button'>Continue</div>
       </div>
       {#each state.get_players() as player (player.pid)}
-	<div class='player {ui_border_style(player)}' on:click={() => ui_click_player_advanced(player)} animate:flip='{{ duration: (d) => d * 2 }}'>
+	<div class='player {ui_border_style(player)}'>
 	  <div>{player.name}</div>
 	  <div>{player.frame_1st} - {player.frame_2nd} - {player.frame_3rd}</div>
 	  <div class='player-points'>{player.points}</div>
@@ -1141,13 +1147,7 @@
 	  {:else}
 	    <div>({player.last_break})</div>
 	  {/if}
-	  {#if state.can_concede(player.pid) }
-	    <div class='player-button active-button'>Concede</div>
-	  {:else if state.can_declare_winner(player.pid) }
-	    <div class='player-button active-button'>Set Winner</div>
-	  {:else}
-	    <div class='player-button'></div>
-	  {/if}
+	  <div class='player-button'></div>
 	</div>
       {/each}
       <div class='button-bar'>

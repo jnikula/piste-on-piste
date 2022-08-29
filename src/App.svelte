@@ -826,7 +826,7 @@
   const UiState = {
     UI_START: 0,
     UI_MAIN: 1,
-    UI_STAT: 2,
+    UI_MORE: 2,
     UI_EDIT: 3,
   };
 
@@ -1076,7 +1076,7 @@
 	{/each}
       </div>
     </div>
-  {:else if ui_main_state == UiState.UI_STAT }
+  {:else if ui_main_state == UiState.UI_MORE }
     <div class='grid-container'>
       <div class='player' on:click={ui_next_state}>
 	<div>{frame_time}</div>

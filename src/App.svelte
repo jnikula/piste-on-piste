@@ -827,7 +827,7 @@
     UI_START: 0,
     UI_MAIN: 1,
     UI_STAT: 2,
-    UI_ADVANCED: 3,
+    UI_EDIT: 3,
   };
 
   let ui_main_state = UiState.UI_START;
@@ -879,7 +879,7 @@
 
   function ui_next_state() {
     ui_main_state++;
-    if (ui_main_state > UiState.UI_ADVANCED)
+    if (ui_main_state > UiState.UI_EDIT)
       ui_main_state = UiState.UI_MAIN;
   }
 
@@ -1086,7 +1086,7 @@
 	  <div>(Remaining {state.num_points()})</div>
 	</div>
 	<div>Break</div>
-	<div class='player-button active-button'>Advanced</div>
+	<div class='player-button active-button'>Edit</div>
       </div>
       {#each state.get_players() as player (player.pid)}
 	<div class='player {ui_border_style(player)}' on:click={() => ui_click_player_more(player)}>

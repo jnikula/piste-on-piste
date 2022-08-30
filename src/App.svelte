@@ -979,7 +979,7 @@
 	<div></div>
 	<div></div>
 	<div></div>
-	<div class='player-button active-button'>Shuffle</div>
+	<div class='player-button'>Shuffle</div>
       </div>
       {#each ui_names as player_name (player_name.id)}
 	<div class='player {ui_start_name_border_style(player_name.name)}' animate:flip='{{ duration: (d) => d * 2 }}'>
@@ -995,9 +995,9 @@
 	<div></div>
 	<div></div>
 	{#if ui_can_new_game }
-	  <div class='player-button active-button'>New game</div>
+	  <div class='player-button'>New game</div>
 	{:else}
-	  <div class='player-button'></div>
+	  <div></div>
 	{/if}
       </div>
       {#each saved_games as save_game, index (save_game.slot) }
@@ -1009,7 +1009,7 @@
 	    <div>{format_date(save_game.timestamp)}</div>
 	    <div>{format_time(save_game.timestamp)}</div>
 	    <div></div>
-	    <div class='player-button active-button'>Load game</div>
+	    <div class='player-button'>Load game</div>
 	  {:else}
 	    <div></div>
 	    <div></div>
@@ -1032,7 +1032,7 @@
 	  <div>(Remaining {state.num_points()})</div>
 	</div>
 	<div>Break</div>
-	<div class='player-button active-button'>&bull;&bull;&bull;</div>
+	<div class='player-button'>&bull;&bull;&bull;</div>
       </div>
       {#each state.get_players() as player (player.pid)}
 	<div class='player {ui_border_style(player)}' on:click={() => ui_click_player(player)} animate:flip='{{ duration: (d) => d * 2 }}'>
@@ -1045,11 +1045,11 @@
 	    <div>({player.last_break})</div>
 	  {/if}
 	  {#if state.is_current_player(player.pid) && state.can_end_turn() }
-	    <div class='player-button active-button'>End Turn</div>
+	    <div class='player-button'>End Turn</div>
 	  {:else if state.can_foul_retake() && state.is_previous_player(player.pid) }
-	    <div class='player-button active-button'>Play Again</div>
+	    <div class='player-button'>Play Again</div>
 	  {:else}
-	    <div class='player-button'></div>
+	    <div></div>
 	  {/if}
 	</div>
       {/each}
@@ -1097,7 +1097,7 @@
 	  <div>(Remaining {state.num_points()})</div>
 	</div>
 	<div>Break</div>
-	<div class='player-button active-button'>Edit</div>
+	<div class='player-button'>Edit</div>
       </div>
       {#each state.get_players() as player (player.pid)}
 	<div class='player {ui_border_style(player)}' on:click={() => ui_click_player_more(player)}>
@@ -1110,11 +1110,11 @@
 	    <div class='player-break'><Break balls={player._last_break}></Break></div>
 	  {/if}
 	  {#if state.can_concede(player.pid) }
-	    <div class='player-button active-button'>Concede</div>
+	    <div class='player-button'>Concede</div>
 	  {:else if state.can_declare_winner(player.pid) }
-	    <div class='player-button active-button'>Set Winner</div>
+	    <div class='player-button'>Set Winner</div>
 	  {:else}
-	    <div class='player-button'></div>
+	    <div></div>
 	  {/if}
 	</div>
       {/each}
@@ -1127,9 +1127,9 @@
 	<div>Game high</div>
 	<div></div>
 	{#if state.can_new_frame() }
-	  <div class='player-button active-button'>New frame</div>
+	  <div class='player-button'>New frame</div>
 	{:else}
-	  <div class='player-button'></div>
+	  <div></div>
 	{/if}
       </div>
       {#each state.get_players() as player (player.pid)}
@@ -1152,7 +1152,7 @@
 	  <div>(Remaining {state.num_points()})</div>
 	</div>
 	<div>Break</div>
-	<div class='player-button active-button'>Continue</div>
+	<div class='player-button'>Continue</div>
       </div>
       {#each state.get_players() as player (player.pid)}
 	<div class='player {ui_border_style(player)}'>
@@ -1164,7 +1164,7 @@
 	  {:else}
 	    <div>({player.last_break})</div>
 	  {/if}
-	  <div class='player-button'></div>
+	  <div></div>
 	</div>
       {/each}
       <div class='button-bar'>
@@ -1249,12 +1249,9 @@
   }
 
   .player-button {
-    color: black;
-  }
-
-  .active-button {
-    border-radius: inherit;
     background-image: linear-gradient(30deg, gray, white);
+    border-radius: inherit;
+    color: black;
   }
 
   .button-bar {

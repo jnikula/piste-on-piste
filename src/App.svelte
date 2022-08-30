@@ -1124,9 +1124,9 @@
 	<div>Frame time</div>
 	<div>Frame balls</div>
 	<div>Frame high</div>
+	<div></div>
 	<div>Game balls</div>
 	<div>Game high</div>
-	<div></div>
 	{#if state.can_new_frame() }
 	  <div class='card-button'>New frame</div>
 	{:else}
@@ -1138,6 +1138,7 @@
 	<div>{ player.frame_time }</div>
 	<div>{ player.frame_balls }</div>
 	<div>{ player.frame_high_break }</div>
+	<div></div>
 	<div>{ player.game_balls }</div>
 	<div>{ player.game_high_break }</div>
       </div>

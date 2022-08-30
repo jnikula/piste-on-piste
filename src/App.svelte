@@ -979,7 +979,7 @@
 	<div></div>
 	<div></div>
 	<div></div>
-	<div class='player-button'>Shuffle</div>
+	<div class='card-button'>Shuffle</div>
       </div>
       {#each ui_names as player_name (player_name.id)}
 	<div class='score-card {ui_start_name_border_style(player_name.name)}' animate:flip='{{ duration: (d) => d * 2 }}'>
@@ -995,7 +995,7 @@
 	<div></div>
 	<div></div>
 	{#if ui_can_new_game }
-	  <div class='player-button'>New game</div>
+	  <div class='card-button'>New game</div>
 	{:else}
 	  <div></div>
 	{/if}
@@ -1009,7 +1009,7 @@
 	    <div>{format_date(save_game.timestamp)}</div>
 	    <div>{format_time(save_game.timestamp)}</div>
 	    <div></div>
-	    <div class='player-button'>Load game</div>
+	    <div class='card-button'>Load game</div>
 	  {:else}
 	    <div></div>
 	    <div></div>
@@ -1032,7 +1032,7 @@
 	  <div>(Remaining {state.num_points()})</div>
 	</div>
 	<div>Break</div>
-	<div class='player-button'>&bull;&bull;&bull;</div>
+	<div class='card-button'>&bull;&bull;&bull;</div>
       </div>
       {#each state.get_players() as player (player.pid)}
 	<div class='score-card {ui_border_style(player)}' on:click={() => ui_click_player(player)} animate:flip='{{ duration: (d) => d * 2 }}'>
@@ -1045,9 +1045,9 @@
 	    <div>({player.last_break})</div>
 	  {/if}
 	  {#if state.is_current_player(player.pid) && state.can_end_turn() }
-	    <div class='player-button'>End Turn</div>
+	    <div class='card-button'>End Turn</div>
 	  {:else if state.can_foul_retake() && state.is_previous_player(player.pid) }
-	    <div class='player-button'>Play Again</div>
+	    <div class='card-button'>Play Again</div>
 	  {:else}
 	    <div></div>
 	  {/if}
@@ -1097,7 +1097,7 @@
 	  <div>(Remaining {state.num_points()})</div>
 	</div>
 	<div>Break</div>
-	<div class='player-button'>Edit</div>
+	<div class='card-button'>Edit</div>
       </div>
       {#each state.get_players() as player (player.pid)}
 	<div class='score-card {ui_border_style(player)}' on:click={() => ui_click_player_more(player)}>
@@ -1110,9 +1110,9 @@
 	    <div class='score-card-break'><Break balls={player._last_break}></Break></div>
 	  {/if}
 	  {#if state.can_concede(player.pid) }
-	    <div class='player-button'>Concede</div>
+	    <div class='card-button'>Concede</div>
 	  {:else if state.can_declare_winner(player.pid) }
-	    <div class='player-button'>Set Winner</div>
+	    <div class='card-button'>Set Winner</div>
 	  {:else}
 	    <div></div>
 	  {/if}
@@ -1127,7 +1127,7 @@
 	<div>Game high</div>
 	<div></div>
 	{#if state.can_new_frame() }
-	  <div class='player-button'>New frame</div>
+	  <div class='card-button'>New frame</div>
 	{:else}
 	  <div></div>
 	{/if}
@@ -1152,7 +1152,7 @@
 	  <div>(Remaining {state.num_points()})</div>
 	</div>
 	<div>Break</div>
-	<div class='player-button'>Continue</div>
+	<div class='card-button'>Continue</div>
       </div>
       {#each state.get_players() as player (player.pid)}
 	<div class='score-card {ui_border_style(player)}'>
@@ -1250,7 +1250,7 @@
     overflow-x: hidden;
   }
 
-  .player-button {
+  .card-button {
     background-image: linear-gradient(30deg, gray, white);
     border-radius: inherit;
     color: black;

@@ -989,11 +989,11 @@
       {/each}
 
       <div class='info-card' on:click={ui_new_game}>
+	<div class='info-card-copyright'>&copy; 2022 Jani Nikula<br>License: GPL 3.0 or later</div>
+	<div></div>
 	<div>Piste</div>
 	<div>on</div>
 	<div>Piste</div>
-	<div></div>
-	<div></div>
 	<div></div>
 	{#if ui_can_new_game }
 	  <div class='card-button'>New game</div>
@@ -1247,6 +1247,10 @@
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+  }
+
+  .info-card-copyright {
+    font-size: 40%;
   }
 
   .score-card-points {

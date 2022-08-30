@@ -35,7 +35,16 @@ License v3.0 or later`_ (GPL-3.0-or-later).
 Contact
 -------
 
-Please use GitHub issues.
+Please use GitHub issues for any questions, comments, or bug reports you might
+have.
 
+Note from the Author
+--------------------
+
+While I am a professional programmer, this is purely a hobby project, if ever
+there was one. I've never done anything in JavaScript or Svelte before. It's not
+a pretty codebase. But I'm not sure I have much motivation to polish it either.
+
+I'm also not much of a snooker player.
 
 .. [*] Finnish for "a point is a point".

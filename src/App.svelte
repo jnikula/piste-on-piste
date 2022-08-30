@@ -947,7 +947,7 @@
     ui_page = UiPage.PLAY;
   }
 
-  function ui_border_style(player) {
+  function ui_score_card_player_style(player) {
     if (state._is_frame_over()) {
       if (player.winner)
 	return 'first-place';
@@ -1035,7 +1035,7 @@
 	<div class='card-button'>&bull;&bull;&bull;</div>
       </div>
       {#each state.get_players() as player (player.pid)}
-	<div class='score-card {ui_border_style(player)}' on:click={() => ui_click_player(player)} animate:flip='{{ duration: (d) => d * 2 }}'>
+	<div class='score-card {ui_score_card_player_style(player)}' on:click={() => ui_click_player(player)} animate:flip='{{ duration: (d) => d * 2 }}'>
 	  <div>{player.name}</div>
 	  <div>{player.frame_1st} - {player.frame_2nd} - {player.frame_3rd}</div>
 	  <div class='score-card-points'>{player.points}</div>
@@ -1100,7 +1100,7 @@
 	<div class='card-button'>Edit</div>
       </div>
       {#each state.get_players() as player (player.pid)}
-	<div class='score-card {ui_border_style(player)}' on:click={() => ui_click_player_more(player)}>
+	<div class='score-card {ui_score_card_player_style(player)}' on:click={() => ui_click_player_more(player)}>
 	  <div>{player.name}</div>
 	  <div>{player.frame_1st} - {player.frame_2nd} - {player.frame_3rd}</div>
 	  <div class='score-card-points'>{player.points}</div>
@@ -1155,7 +1155,7 @@
 	<div class='card-button'>Continue</div>
       </div>
       {#each state.get_players() as player (player.pid)}
-	<div class='score-card {ui_border_style(player)}'>
+	<div class='score-card {ui_score_card_player_style(player)}'>
 	  <div>{player.name}</div>
 	  <div>{player.frame_1st} - {player.frame_2nd} - {player.frame_3rd}</div>
 	  <div class='score-card-points'>{player.points}</div>

@@ -965,7 +965,7 @@
       return '';
   }
 
-  function ui_start_name_border_style(name) {
+  function ui_name_input_card_style(name) {
     return ui_start_name_valid(name) ? '' : 'retake'; // FIXME
   }
 </script>
@@ -974,15 +974,16 @@
   {#if ui_page == UiPage.START }
 
     <div class='grid-container'>
-      <div class='score-card' on:click={ui_shuffle_names}>
+      <div class='name-input-card' on:click={ui_shuffle_names}>
 	<div>Enter names</div>
+	<div></div>
 	<div></div>
 	<div></div>
 	<div></div>
 	<div class='card-button'>Shuffle</div>
       </div>
       {#each ui_names as player_name (player_name.id)}
-	<div class='score-card {ui_start_name_border_style(player_name.name)}' animate:flip='{{ duration: (d) => d * 2 }}'>
+	<div class='name-input-card {ui_name_input_card_style(player_name.name)}' animate:flip='{{ duration: (d) => d * 2 }}'>
 	  <input class='name-input' size=9 minlength=1 maxlength=10 placeholder='enter name' bind:value='{player_name.name}'/>
 	</div>
       {/each}
@@ -1217,6 +1218,12 @@
     border-color: transparent;
     border-radius: 2vmin;
     border-width: 0.5vmin;
+  }
+
+  .name-input-card {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 2fr 1fr 1fr 1fr 1fr 1fr;
   }
 
   .name-input {

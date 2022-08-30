@@ -974,7 +974,7 @@
   {#if ui_main_state == UiState.UI_START }
 
     <div class='grid-container'>
-      <div class='player' on:click={ui_shuffle_names}>
+      <div class='score-card' on:click={ui_shuffle_names}>
 	<div>Enter names</div>
 	<div></div>
 	<div></div>
@@ -982,12 +982,12 @@
 	<div class='player-button'>Shuffle</div>
       </div>
       {#each ui_names as player_name (player_name.id)}
-	<div class='player {ui_start_name_border_style(player_name.name)}' animate:flip='{{ duration: (d) => d * 2 }}'>
+	<div class='score-card {ui_start_name_border_style(player_name.name)}' animate:flip='{{ duration: (d) => d * 2 }}'>
 	  <input class='name-input' size=9 minlength=1 maxlength=10 placeholder='enter name' bind:value='{player_name.name}'/>
 	</div>
       {/each}
 
-      <div class='player player-stat' on:click={ui_new_game}>
+      <div class='info-card' on:click={ui_new_game}>
 	<div>Piste</div>
 	<div>on</div>
 	<div>Piste</div>
@@ -1001,7 +1001,7 @@
 	{/if}
       </div>
       {#each saved_games as save_game, index (save_game.slot) }
-	<div class='player player-stat' on:click={() => ui_load_game(save_game.slot)}>
+	<div class='info-card' on:click={() => ui_load_game(save_game.slot)}>
 	  <div>Game save {index}</div>
 	  <div></div>
 	  {#if save_game.timestamp }
@@ -1024,7 +1024,7 @@
 
   {:else if ui_main_state == UiState.UI_PLAY }
     <div class='grid-container'>
-      <div class='player' on:click={ui_next_state}>
+      <div class='score-card' on:click={ui_next_state}>
 	<div>{frame_time}</div>
 	<div>Frames ({state.num_frames})</div>
 	<div>
@@ -1035,7 +1035,7 @@
 	<div class='player-button'>&bull;&bull;&bull;</div>
       </div>
       {#each state.get_players() as player (player.pid)}
-	<div class='player {ui_border_style(player)}' on:click={() => ui_click_player(player)} animate:flip='{{ duration: (d) => d * 2 }}'>
+	<div class='score-card {ui_border_style(player)}' on:click={() => ui_click_player(player)} animate:flip='{{ duration: (d) => d * 2 }}'>
 	  <div>{player.name}</div>
 	  <div>{player.frame_1st} - {player.frame_2nd} - {player.frame_3rd}</div>
 	  <div class='player-points'>{player.points}</div>
@@ -1089,7 +1089,7 @@
     </div>
   {:else if ui_main_state == UiState.UI_MORE }
     <div class='grid-container'>
-      <div class='player' on:click={ui_next_state}>
+      <div class='score-card' on:click={ui_next_state}>
 	<div>{frame_time}</div>
 	<div>Frames ({state.num_frames})</div>
 	<div>
@@ -1100,7 +1100,7 @@
 	<div class='player-button'>Edit</div>
       </div>
       {#each state.get_players() as player (player.pid)}
-	<div class='player {ui_border_style(player)}' on:click={() => ui_click_player_more(player)}>
+	<div class='score-card {ui_border_style(player)}' on:click={() => ui_click_player_more(player)}>
 	  <div>{player.name}</div>
 	  <div>{player.frame_1st} - {player.frame_2nd} - {player.frame_3rd}</div>
 	  <div class='player-points'>{player.points}</div>
@@ -1119,7 +1119,7 @@
 	</div>
       {/each}
 
-      <div class='player player-stat' on:click={ui_new_frame}>
+      <div class='info-card' on:click={ui_new_frame}>
 	<div>Frame time</div>
 	<div>Frame balls</div>
 	<div>Frame high</div>
@@ -1133,7 +1133,7 @@
 	{/if}
       </div>
       {#each state.get_players() as player (player.pid)}
-      <div class='player player-stat'>
+      <div class='info-card'>
 	<div>{ player.frame_time }</div>
 	<div>{ player.frame_balls }</div>
 	<div>{ player.frame_high_break }</div>
@@ -1144,7 +1144,7 @@
     </div>
   {:else}
     <div class='grid-container'>
-      <div class='player' on:click={ui_next_state}>
+      <div class='score-card' on:click={ui_next_state}>
 	<div>{frame_time}</div>
 	<div>Frames ({state.num_frames})</div>
 	<div>
@@ -1155,7 +1155,7 @@
 	<div class='player-button'>Continue</div>
       </div>
       {#each state.get_players() as player (player.pid)}
-	<div class='player {ui_border_style(player)}'>
+	<div class='score-card {ui_border_style(player)}'>
 	  <div>{player.name}</div>
 	  <div>{player.frame_1st} - {player.frame_2nd} - {player.frame_3rd}</div>
 	  <div class='player-points'>{player.points}</div>
@@ -1230,13 +1230,15 @@
     text-transform: inherit;
   }
 
-  .player {
+  .score-card {
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: 1fr 1fr 3fr 1fr 1fr;
   }
 
-  .player-stat {
+  .info-card {
+    display: grid;
+    grid-template-columns: 1fr;
     grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
   }
 

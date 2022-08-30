@@ -1038,7 +1038,7 @@
 	<div class='score-card {ui_border_style(player)}' on:click={() => ui_click_player(player)} animate:flip='{{ duration: (d) => d * 2 }}'>
 	  <div>{player.name}</div>
 	  <div>{player.frame_1st} - {player.frame_2nd} - {player.frame_3rd}</div>
-	  <div class='player-points'>{player.points}</div>
+	  <div class='score-card-points'>{player.points}</div>
 	  {#if state.is_current_player(player.pid)}
 	    <div>{player.cur_break}</div>
 	  {:else}
@@ -1103,11 +1103,11 @@
 	<div class='score-card {ui_border_style(player)}' on:click={() => ui_click_player_more(player)}>
 	  <div>{player.name}</div>
 	  <div>{player.frame_1st} - {player.frame_2nd} - {player.frame_3rd}</div>
-	  <div class='player-points'>{player.points}</div>
+	  <div class='score-card-points'>{player.points}</div>
 	  {#if state.is_current_player(player.pid)}
-	    <div class='player-break'><Break balls={player._cur_break}></Break></div>
+	    <div class='score-card-break'><Break balls={player._cur_break}></Break></div>
 	  {:else}
-	    <div class='player-break'><Break balls={player._last_break}></Break></div>
+	    <div class='score-card-break'><Break balls={player._last_break}></Break></div>
 	  {/if}
 	  {#if state.can_concede(player.pid) }
 	    <div class='player-button'>Concede</div>
@@ -1158,7 +1158,7 @@
 	<div class='score-card {ui_border_style(player)}'>
 	  <div>{player.name}</div>
 	  <div>{player.frame_1st} - {player.frame_2nd} - {player.frame_3rd}</div>
-	  <div class='player-points'>{player.points}</div>
+	  <div class='score-card-points'>{player.points}</div>
 	  {#if state.is_current_player(player.pid)}
 	    <div>{player.cur_break}</div>
 	  {:else}
@@ -1242,11 +1242,11 @@
     grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
   }
 
-  .player-points {
+  .score-card-points {
     font-size: 300%;
   }
 
-  .player-break {
+  .score-card-break {
     overflow-x: hidden;
   }
 

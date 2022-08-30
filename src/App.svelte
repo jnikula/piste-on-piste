@@ -822,15 +822,15 @@
     setTimeout(update_frame_time, 1000);
   }
 
-  // ui main states
-  const UiState = {
-    UI_START: 0,
-    UI_PLAY: 1,
-    UI_MORE: 2,
-    UI_EDIT: 3,
+  // ui pages
+  const UiPage = {
+    START: 0,
+    PLAY: 1,
+    MORE: 2,
+    EDIT: 3,
   };
 
-  let ui_main_state = UiState.UI_START;
+  let ui_page = UiPage.START;
 
   function ui_shuffle_names() {
     ui_names = shuffle(ui_names);
@@ -847,7 +847,7 @@
 
     update_frame_time();
 
-    ui_main_state = UiState.UI_PLAY;
+    ui_page = UiPage.PLAY;
   }
 
   function ui_start_name_valid(name) {
@@ -874,13 +874,13 @@
 
     update_frame_time();
 
-    ui_main_state = UiState.UI_PLAY;
+    ui_page = UiPage.PLAY;
   }
 
-  function ui_next_state() {
-    ui_main_state++;
-    if (ui_main_state > UiState.UI_EDIT)
-      ui_main_state = UiState.UI_PLAY;
+  function ui_next_page() {
+    ui_page++;
+    if (ui_page > UiPage.EDIT)
+      ui_page = UiPage.PLAY;
   }
 
   // ui actions, each need to handle undo
@@ -944,7 +944,7 @@
     s.new_frame();
     state = undo_stack_push(s);
 
-    ui_main_state = UiState.UI_PLAY;
+    ui_page = UiPage.PLAY;
   }
 
   function ui_border_style(player) {
@@ -971,7 +971,7 @@
 </script>
 
 <main>
-  {#if ui_main_state == UiState.UI_START }
+  {#if ui_page == UiPage.START }
 
     <div class='grid-container'>
       <div class='score-card' on:click={ui_shuffle_names}>
@@ -1022,9 +1022,9 @@
 
     </div>
 
-  {:else if ui_main_state == UiState.UI_PLAY }
+  {:else if ui_page == UiPage.PLAY }
     <div class='grid-container'>
-      <div class='score-card' on:click={ui_next_state}>
+      <div class='score-card' on:click={ui_next_page}>
 	<div>{frame_time}</div>
 	<div>Frames ({state.num_frames})</div>
 	<div>
@@ -1087,9 +1087,9 @@
 	{/each}
       </div>
     </div>
-  {:else if ui_main_state == UiState.UI_MORE }
+  {:else if ui_page == UiPage.MORE }
     <div class='grid-container'>
-      <div class='score-card' on:click={ui_next_state}>
+      <div class='score-card' on:click={ui_next_page}>
 	<div>{frame_time}</div>
 	<div>Frames ({state.num_frames})</div>
 	<div>
@@ -1144,7 +1144,7 @@
     </div>
   {:else}
     <div class='grid-container'>
-      <div class='score-card' on:click={ui_next_state}>
+      <div class='score-card' on:click={ui_next_page}>
 	<div>{frame_time}</div>
 	<div>Frames ({state.num_frames})</div>
 	<div>

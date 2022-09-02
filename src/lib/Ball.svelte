@@ -1,9 +1,9 @@
 <!-- SPDX-License-Identifier: GPL-3.0-or-later -->
 <!-- Copyright (c) 2022 Jani Nikula <jani@nikula.org> -->
-<script>
-  export let color;
+<script lang='ts'>
+  export let color: string;
   export let action = () => {};
-  export let active;
+  export let active: boolean;
 
   const csscolors = {
     'red': 'red',
@@ -16,11 +16,11 @@
     'gray': 'dimgray'
   };
 
-  let csscolor = csscolors[color];
+  let csscolor: string = csscolors[color];
 
   $: brightness = active ? '100%' : '50%'
 
-  function onclick() {
+  function onclick(): void {
     if (active)
       action()
   }

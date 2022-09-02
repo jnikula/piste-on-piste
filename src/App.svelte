@@ -8,15 +8,6 @@
   import State from './lib/State';
   import type Player from './lib/Player';
 
-  let value_colors = {
-    1: 'red',
-    2: 'yellow',
-    3: 'green',
-    4: 'brown',
-    5: 'blue',
-    6: 'pink',
-    7: 'black'
-  };
 
   // stored names for new games
 
@@ -410,7 +401,7 @@
       <div class='button-bar'>
 	<div class='label'>Pot</div>
 	{#each [1,2,3,4,5,6,7] as value}
-	  <Ball color={value_colors[value]}
+	  <Ball value={value}
 		active={state.can_pot_ball(value)}
 		action={() => ui_pot_ball(value)}>
 	    {value}
@@ -420,12 +411,12 @@
 
       <div class='button-bar'>
 	<div class='label'>Undo</div>
-	<Ball color=gray
+	<Ball value={0}
 	      active={ui_can_undo}
 	      action={() => ui_undo()}>
 	  &#x21b6;
 	</Ball>
-	<Ball color=gray
+	<Ball value={0}
 	      active={ui_can_redo}
 	      action={() => ui_redo()}>
 	  &#x21b7;
@@ -433,7 +424,7 @@
 
 	<div class='label'>Foul</div>
 	{#each [4,5,6,7] as value}
-	  <Ball color=gray
+	  <Ball value={0}
 		active={state.can_commit_foul(value)}
 		action={() => ui_commit_foul(value)}>
 	    {value}
@@ -525,7 +516,7 @@
       <div class='button-bar'>
 	<div class='label'>Count</div>
 	{#each [1,2,3,4,5,6,7] as value}
-	  <Ball color={value_colors[value]}
+	  <Ball value={value}
 		active={false}>
 	    {state.num_balls(value)}
 	  </Ball>
@@ -533,12 +524,12 @@
       </div>
       <div class='button-bar'>
 	<div class='label'>Fix</div>
-	<Ball color=gray
+	<Ball value={0}
 	      active={state.can_plus_balls()}
 	      action={() => ui_plus_balls()}>
 	  +
 	</Ball>
-	<Ball color=gray
+	<Ball value={0}
 	      active={state.can_minus_balls()}
 	      action={() => ui_minus_balls()}>
 	  -

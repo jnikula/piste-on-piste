@@ -1,33 +1,36 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (c) 2022 Jani Nikula <jani@nikula.org>
 
-function pad(num) {
-  return num.toString().padStart(2, 0);
+function pad(num: number): string {
+  return num.toString().padStart(2, '0');
 }
 
-function format_date(timestamp) {
+function format_date(timestamp: number): string {
   if (!timestamp)
     return '';
 
-  let d = new Date();
+  let d: Date = new Date();
+
   d.setTime(timestamp);
 
   return `${d.getFullYear()}-${pad(d.getMonth())}-${pad(d.getDate())}`;
 }
 
-function format_time(timestamp) {
+function format_time(timestamp: number): string {
   if (!timestamp)
     return '';
 
-  let d = new Date();
+  let d: Date = new Date();
+
   d.setTime(timestamp);
 
   return `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
 }
 
-function format_ms(ms) {
-  let sec = ms / 1000;
-  const min = Math.floor(sec / 60);
+function format_ms(ms: number): string {
+  let sec: number = ms / 1000;
+  const min: number = Math.floor(sec / 60);
+
   sec = Math.floor(sec % 60);
 
   return pad(min) + ':' + pad(sec);

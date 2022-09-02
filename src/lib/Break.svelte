@@ -2,20 +2,7 @@
 <!-- Copyright (c) 2022 Jani Nikula <jani@nikula.org> -->
 <script lang='ts'>
   export let balls: number[];
-
-  function value_to_csscolor(value: number): string {
-    const csscolors = {
-      1: 'red',
-      2: 'gold',
-      3: 'green',
-      4: 'saddlebrown',
-      5: 'blue',
-      6: 'pink',
-      7: 'black',
-    };
-
-    return csscolors[Math.abs(value)];
-  }
+  import { value_to_csscolor } from './ball-colors';
 </script>
 
 {#each balls as value}

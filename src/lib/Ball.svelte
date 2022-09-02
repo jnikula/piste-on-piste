@@ -4,19 +4,7 @@
   export let value: number;
   export let action = () => {};
   export let active: boolean;
-
-  const csscolors = {
-    0: 'dimgray',
-    1: 'red',
-    2: 'gold',
-    3: 'green',
-    4: 'saddlebrown',
-    5: 'blue',
-    6: 'hotpink',
-    7: 'black',
-  };
-
-  let csscolor: string = csscolors[value];
+  import { value_to_csscolor } from './ball-colors';
 
   $: brightness = active ? '100%' : '50%'
 
@@ -26,7 +14,7 @@
   }
 </script>
 
-<div class='ball' style='--csscolor: {csscolor}; --brightness: {brightness};' on:click={onclick}>
+<div class='ball' style='--csscolor: {value_to_csscolor(value)}; --brightness: {brightness};' on:click={onclick}>
   <slot></slot>
 </div>
 

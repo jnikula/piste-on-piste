@@ -6,6 +6,7 @@
   import Ball from './lib/Ball.svelte';
   import Break from './lib/Break.svelte';
   import State from './lib/State';
+  import type Player from './lib/Player';
 
   let value_colors = {
     1: 'red',
@@ -19,11 +20,12 @@
 
   // stored names for new games
 
-  function shuffle(array) {
-    let result = [];
+  function shuffle(array: any[]): any[] {
+    let result: any[] = [];
 
     while (array.length) {
-      let index = Math.floor(Math.random() * array.length);
+      let index: number = Math.floor(Math.random() * array.length);
+
       result.push(array[index]);
       array.splice(index, 1);
     }
@@ -31,14 +33,18 @@
     return result;
   }
 
+  type SavedName = {
+    id: number;
+    name: string;
+  };
 
   // save names to local storage
-  function save_names(names) {
+  function save_names(names: SavedName[]) {
     localStorage.setItem('piste-on-piste-names', JSON.stringify(names));
   }
 
   // load names from local storage
-  function load_names() {
+  function load_names(): SavedName[] {
     let names_json = localStorage.getItem('piste-on-piste-names');
 
     if (!names_json)
@@ -56,7 +62,7 @@
     }
   }
 
-  function setup_names() {
+  function setup_names(): SavedName[] {
     let names = load_names();
 
     if (names)
@@ -69,23 +75,23 @@
     return names;
   }
 
-  let ui_names = setup_names();
+  let ui_names: SavedName[] = setup_names();
 
   // undo stack and current state
-  let undo_stack = [];
-  let undo_index = -1;
-  let save_game_slot = 0;
-  let state;
+  let undo_stack: State[] = [];
+  let undo_index: number = -1;
+  let save_game_slot: number = 0;
+  let state: State;
 
-  function save_game_name(slot) {
+  function save_game_name(slot: number): string {
     return `piste-on-piste-save-${slot}`;
   }
 
-  function save_game() {
+  function save_game(): void {
     localStorage.setItem(save_game_name(save_game_slot), JSON.stringify(undo_stack));
   }
 
-  function undo_stack_push(s, autosave=true) {
+  function undo_stack_push(s: State, autosave: boolean = true): State {
     undo_stack.splice(++undo_index, undo_stack.length, s);
 
     if (autosave)
@@ -97,24 +103,29 @@
   $: ui_can_undo = undo_index > 0;
   $: ui_can_redo = undo_index + 1 < undo_stack.length;
 
-  function ui_undo() {
+  function ui_undo(): void {
     console.assert(ui_can_undo);
 
     state = undo_stack[--undo_index];
   }
 
-  function ui_redo() {
+  function ui_redo(): void {
     console.assert(ui_can_redo);
 
     state = undo_stack[++undo_index];
   }
 
-  function read_saved_games() {
-    let saved = [];
+  type SaveGameId = {
+    slot: number;
+    timestamp: number;
+  };
+
+  function read_saved_games(): SaveGameId[] {
+    let saved: SaveGameId[] = [];
 
     for (let slot of [0,1,2]) {
-      let timestamp = 0;
-      let json = localStorage.getItem(save_game_name(slot));
+      let timestamp: number = 0;
+      let json: string = localStorage.getItem(save_game_name(slot));
 
       if (json) {
 	let source = JSON.parse(json);
@@ -125,7 +136,7 @@
     }
 
     // newest to oldest, with unused (timestamp 0) being oldest
-    saved.sort((s1, s2) => s2.timestamp - s1.timestamp);
+    saved.sort((s1: SaveGameId, s2: SaveGameId) => s2.timestamp - s1.timestamp);
 
     // save new game in the oldest slot
     save_game_slot = saved[saved.length - 1].slot;
@@ -133,10 +144,10 @@
     return saved;
   }
 
-  let saved_games = read_saved_games();
+  let saved_games: SaveGameId[] = read_saved_games();
 
-  function load_game(slot) {
-    let json = localStorage.getItem(save_game_name(slot));
+  function load_game(slot: number): State {
+    let json: string = localStorage.getItem(save_game_name(slot));
     if (!json)
       return null;
 
@@ -155,10 +166,10 @@
 
 
   // frame time update
-  let frame_time = '';
+  let frame_time: string = '';
 
-  function update_frame_time() {
-    const diff = Date.now() - state.timestamp;
+  function update_frame_time(): void {
+    const diff: number = Date.now() - state.timestamp;
 
     frame_time = timeutil.format_ms(diff);
     setTimeout(update_frame_time, 1000);
@@ -174,11 +185,11 @@
 
   let ui_page = UiPage.START;
 
-  function ui_shuffle_names() {
+  function ui_shuffle_names(): void {
     ui_names = shuffle(ui_names);
   }
 
-  function ui_load_game(slot) {
+  function ui_load_game(slot: number): void {
     state = load_game(slot);
     if (!state) {
       console.log(`slot ${slot} not found`);
@@ -192,7 +203,7 @@
     ui_page = UiPage.PLAY;
   }
 
-  function ui_start_name_valid(name) {
+  function ui_start_name_valid(name: string): boolean {
     if (!name)
       return false;
 
@@ -203,7 +214,7 @@
 
   $: ui_can_new_game = ui_names.filter((x) => !ui_start_name_valid(x.name)).length === 0;
 
-  function ui_new_game() {
+  function ui_new_game(): void {
     if (!ui_can_new_game)
       return;
 
@@ -219,39 +230,39 @@
     ui_page = UiPage.PLAY;
   }
 
-  function ui_next_page() {
+  function ui_next_page(): void {
     ui_page++;
     if (ui_page > UiPage.EDIT)
       ui_page = UiPage.PLAY;
   }
 
   // ui actions, each need to handle undo
-  function ui_pot_ball(value) {
-    let s = state.deepcopy();
+  function ui_pot_ball(value: number): void {
+    let s: State = state.deepcopy();
     s.pot_ball(value);
     state = undo_stack_push(s);
   }
 
-  function ui_plus_balls() {
-    let s = state.deepcopy();
+  function ui_plus_balls(): void {
+    let s: State = state.deepcopy();
     s.plus_balls();
     state = undo_stack_push(s);
   }
 
-  function ui_minus_balls() {
-    let s = state.deepcopy();
+  function ui_minus_balls(): void {
+    let s: State = state.deepcopy();
     s.minus_balls();
     state = undo_stack_push(s);
   }
 
-  function ui_commit_foul(value) {
-    let s = state.deepcopy();
+  function ui_commit_foul(value: number): void {
+    let s: State = state.deepcopy();
     s.commit_foul(value);
     state = undo_stack_push(s);
   }
 
-  function ui_click_player(player) {
-    let s = state.deepcopy();
+  function ui_click_player(player: Player): void {
+    let s: State = state.deepcopy();
 
     // FIXME: don't duplicate the conditions here and in html
     if (state.is_current_player(player.pid) && state.can_end_turn())
@@ -264,8 +275,8 @@
     state = undo_stack_push(s);
   }
 
-  function ui_click_player_more(player) {
-    let s = state.deepcopy();
+  function ui_click_player_more(player: Player): void {
+    let s: State = state.deepcopy();
 
     // FIXME: don't duplicate the conditions here and in html
     if (state.can_concede(player.pid))
@@ -278,18 +289,18 @@
     state = undo_stack_push(s);
   }
 
-  function ui_new_frame() {
+  function ui_new_frame(): void {
     if (!state.can_new_frame())
       return;
 
-    let s = state.deepcopy();
+    let s: State = state.deepcopy();
     s.new_frame();
     state = undo_stack_push(s);
 
     ui_page = UiPage.PLAY;
   }
 
-  function ui_score_card_player_style(player) {
+  function ui_score_card_player_style(player: Player): string {
     if (state._is_frame_over()) {
       if (player.winner)
 	return 'first-place';
@@ -307,7 +318,7 @@
       return '';
   }
 
-  function ui_name_input_card_style(name) {
+  function ui_name_input_card_style(name: string): string {
     return ui_start_name_valid(name) ? '' : 'retake'; // FIXME
   }
 </script>

@@ -1,9 +1,9 @@
 <!-- SPDX-License-Identifier: GPL-3.0-or-later -->
 <!-- Copyright (c) 2022 Jani Nikula <jani@nikula.org> -->
-<script>
-  export let balls;
+<script lang='ts'>
+  export let balls: number[];
 
-  function value_to_csscolor(value) {
+  function value_to_csscolor(value: number): string {
     const csscolors = {
       1: 'red',
       2: 'gold',

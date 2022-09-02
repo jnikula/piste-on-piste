@@ -2,8 +2,8 @@
 <!-- Copyright (c) 2022 Jani Nikula <jani@nikula.org> -->
 <script>
   import { flip } from 'svelte/animate';
-  import Ball from './lib/Ball.svelte'
-  import Break from './lib/Break.svelte'
+  import Ball from './lib/Ball.svelte';
+  import Break from './lib/Break.svelte';
 
   let value_colors = {
     1: 'red',

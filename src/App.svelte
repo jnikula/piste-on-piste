@@ -2,6 +2,7 @@
 <!-- Copyright (c) 2022 Jani Nikula <jani@nikula.org> -->
 <script>
   import { flip } from 'svelte/animate';
+  import * as timeutil from './lib/time-util';
   import Ball from './lib/Ball.svelte';
   import Break from './lib/Break.svelte';
 
@@ -14,18 +15,6 @@
     6: 'pink',
     7: 'black'
   };
-
-  function pad(num) {
-    return num.toString().padStart(2, 0);
-  }
-
-  function ms_to_string(ms) {
-    let sec = ms / 1000;
-    const min = Math.floor(sec / 60);
-    sec = Math.floor(sec % 60);
-
-    return pad(min) + ':' + pad(sec);
-  }
 
   class Player {
     _initialize(pid, pos, name) {
@@ -106,7 +95,7 @@
     }
 
     get frame_time() {
-      return ms_to_string(this._frame_time);
+      return timeutil.format_ms(this._frame_time);
     }
 
     log_time(duration) {
@@ -794,23 +783,6 @@
     return undo_stack[undo_index];
   }
 
-  function format_date(timestamp) {
-    if (!timestamp)
-      return '';
-
-    let d = new Date();
-    d.setTime(timestamp);
-    return `${d.getFullYear()}-${pad(d.getMonth())}-${pad(d.getDate())}`;
-  }
-
-  function format_time(timestamp) {
-    if (!timestamp)
-      return '';
-
-    let d = new Date();
-    d.setTime(timestamp);
-    return `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
-  }
 
   // frame time update
   let frame_time = '';
@@ -818,7 +790,7 @@
   function update_frame_time() {
     const diff = Date.now() - state.timestamp;
 
-    frame_time = ms_to_string(diff);
+    frame_time = timeutil.format_ms(diff);
     setTimeout(update_frame_time, 1000);
   }
 
@@ -1007,8 +979,8 @@
 	  <div></div>
 	  {#if save_game.timestamp }
 	    <div>Started</div>
-	    <div>{format_date(save_game.timestamp)}</div>
-	    <div>{format_time(save_game.timestamp)}</div>
+	    <div>{timeutil.format_date(save_game.timestamp)}</div>
+	    <div>{timeutil.format_time(save_game.timestamp)}</div>
 	    <div></div>
 	    <div class='card-button'>Load game</div>
 	  {:else}

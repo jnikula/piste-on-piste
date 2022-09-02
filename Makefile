@@ -4,6 +4,9 @@ run:
 host:
 	npm run dev -- --host
 
+check:
+	npm run check
+
 install:
 	npm install
 

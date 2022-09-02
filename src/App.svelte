@@ -1,6 +1,6 @@
 <!-- SPDX-License-Identifier: GPL-3.0-or-later -->
 <!-- Copyright (c) 2022 Jani Nikula <jani@nikula.org> -->
-<script>
+<script lang='ts'>
   import { flip } from 'svelte/animate';
   import * as timeutil from './lib/time-util';
   import Ball from './lib/Ball.svelte';

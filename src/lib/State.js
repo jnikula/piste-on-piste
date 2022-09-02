@@ -3,20 +3,19 @@
 
 import Player from './Player';
 
+const MAX_BALLS = 15 + 6;
+
+const permutations = [
+  [0, 1, 2],
+  [1, 2, 0],
+  [2, 0, 1],
+  [0, 2, 1],
+  [1, 0, 2],
+  [2, 1, 0]
+]
+
 class State {
   _initialize(names) {
-    // FIXME: should be static
-    this.MAX_BALLS = 15 + 6;
-
-    this.permutations = [
-      [0, 1, 2],
-      [1, 2, 0],
-      [2, 0, 1],
-      [0, 2, 1],
-      [1, 0, 2],
-      [2, 1, 0]
-    ]
-
     // game
     this.cur_perm = 0; // FIXME: start random
     this.num_frames = 0;
@@ -24,7 +23,7 @@ class State {
     // frame
     this.timestamp = Date.now();
     this.turn_timestamp = this.timestamp;
-    this._num_balls = this.MAX_BALLS;
+    this._num_balls = MAX_BALLS;
 
     this.cur_pos = 0;
     this.cur_pid = 0;
@@ -42,7 +41,7 @@ class State {
       else
 	name = `player ${pid}`;
 
-      let pos = this.permutations[this.cur_perm].indexOf(pid);
+      let pos = permutations[this.cur_perm].indexOf(pid);
 
       if (pos === this.cur_pos)
 	this.cur_pid = pid;
@@ -457,13 +456,13 @@ class State {
 
     // game
     this.cur_perm++;
-    if (this.cur_perm >= this.permutations.length)
+    if (this.cur_perm >= permutations.length)
       this.cur_perm = 0;
 
     // frame
     this.timestamp = Date.now();
     this.turn_timestamp = this.timestamp;
-    this._num_balls = this.MAX_BALLS;
+    this._num_balls = MAX_BALLS;
 
     this.cur_pos = 0;
     this.cur_pid = 0; // updated below
@@ -473,7 +472,7 @@ class State {
     this.retake = false;
 
     for (let p of this.players) {
-      let pos = this.permutations[this.cur_perm].indexOf(p.pid);
+      let pos = permutations[this.cur_perm].indexOf(p.pid);
 
       p.new_frame(pos);
 
@@ -483,7 +482,7 @@ class State {
   }
 
   can_plus_balls() {
-    return this._num_balls < this.MAX_BALLS;
+    return this._num_balls < MAX_BALLS;
   }
 
   plus_balls() {

@@ -4,47 +4,47 @@
 import * as timeutil from './time-util';
 
 class Player {
-  _initialize(pid, pos, name) {
-    // game
-    this.pid = pid;
-    this.name = name;
-    this.frame_1st = 0;
-    this.frame_2nd = 0;
-    this.frame_3rd = 0;
+  // game
+  readonly pid: number;
+  readonly name: string;
+  frame_1st: number = 0;
+  frame_2nd: number = 0;
+  frame_3rd: number = 0;
 
-    this.game_high_break = 0;
-    this.game_balls = 0;
+  game_high_break: number = 0;
+  game_balls: number = 0;
 
-    // frame
-    this.points = 0;
-    this.pos = pos;
-    this.winner = false;
-    this.loser = false;
+  // frame
+  pos: number;
+  points: number = 0;
+  winner: boolean = false;
+  loser: boolean = false;
+  frame_high_break: number = 0;
+  frame_balls: number = 0;
+  _frame_time: number = 0;
 
-    this.frame_high_break = 0;
-    this.frame_balls = 0;
-    this._frame_time = 0;
+  // turn
+  _cur_break: number[] = [];
+  _last_break: number[] = [];
 
-    // turn
-    this._cur_break = [];
-    this._last_break = [];
-  }
-
-  _copy(source) {
+  _copy(source: Object): void {
     Object.assign(this, source);
   }
 
-  constructor(pid, pos, name, source=null) {
-    this._initialize(pid, pos, name);
+  constructor(pid: number, pos: number, name: string, source: Object = null) {
+    this.pid = pid;
+    this.pos = pos;
+    this.name = name;
+
     if (source)
       this._copy(source);
   }
 
-  pot_points(points) {
+  pot_points(points: number): void {
     this.points += points;
     this._cur_break.push(points);
 
-    const cur_break = this._cur_break.reduce((a, b) => a + b);
+    const cur_break: number = this._cur_break.reduce((a, b) => a + b);
 
     // game stats
     this.game_balls++;
@@ -55,11 +55,11 @@ class Player {
     this.frame_high_break = Math.max(this.frame_high_break, cur_break);
   }
 
-  log_foul(points) {
+  log_foul(points: number): void {
     this._cur_break.push(-points);
   }
 
-  _break_size(b) {
+  _break_size(b: number[]): number {
     b = b.filter((v) => v > 0);
 
     if (b.length === 0)
@@ -68,28 +68,28 @@ class Player {
     return b.reduce((a, b) => a + b);
   }
 
-  get cur_break() {
+  get cur_break(): number {
     return this._break_size(this._cur_break);
   }
 
-  get last_break() {
+  get last_break(): number {
     return this._break_size(this._last_break);
   }
 
-  end_turn() {
+  end_turn(): void {
     this._last_break = [...this._cur_break];
     this._cur_break = [];
   }
 
-  get frame_time() {
+  get frame_time(): string {
     return timeutil.format_ms(this._frame_time);
   }
 
-  log_time(duration) {
+  log_time(duration: number): void {
     this._frame_time += duration;
   }
 
-  new_frame(pos) {
+  new_frame(pos: number): void {
     this.end_turn();
 
     this.points = 0;
@@ -102,7 +102,7 @@ class Player {
     this._frame_time = 0;
   }
 
-  compare(other) {
+  compare(other: Player): number {
     if (this.winner || other.loser)
       return 1;
     else if (this.loser || other.winner)

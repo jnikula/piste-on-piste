@@ -1,6 +1,11 @@
 Piste on Piste
 ==============
 
+.. toctree::
+   :maxdepth: 2
+   :caption: Contents:
+
+
 This is an early playground for `Piste on Piste`_, a scoreboard app for three
 player snooker.
 

@@ -42,15 +42,15 @@ jobs:
       - uses: actions/download-artifact@v3
         with:
           name: app-artifact
-          path: .
+          path: testing
       - uses: actions/download-artifact@v3
         with:
           name: docs-artifact
           path: .
-      - run: ls -R
-      # - uses: actions/configure-pages@v1
-      # - uses: actions/upload-pages-artifact@v1
-      #   with:
-      #     path: .
-      # - id: deployment
-      #   uses: actions/deploy-pages@main
+      - run: find
+      - uses: actions/configure-pages@v1
+      - uses: actions/upload-pages-artifact@v1
+        with:
+           path: .
+      - id: deployment
+        uses: actions/deploy-pages@v1

@@ -23,6 +23,7 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: '16'
+      - run: npm install
       - run: npm run build
       - run: sed -i 's|/assets/|assets/|g' dist/index.html
       - uses: actions/upload-artifact@v3

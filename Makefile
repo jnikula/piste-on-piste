@@ -1,3 +1,15 @@
+# You can set these variables from the command line, and also
+# from the environment for the first two.
+SPHINXOPTS    ?=
+SPHINXBUILD   ?= sphinx-build
+SOURCEDIR     = docs
+BUILDDIR      = _build
+
+# Put it first so that "make" without argument is like "make help".
+help:
+	@$(SPHINXBUILD) -M help "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
+
+# Node stuff
 run:
 	npm run dev -- --open
 
@@ -13,19 +25,9 @@ install:
 build:
 	npm run build
 
-docs:
-	rst2html docs/index.rst > docs/index.html
+# Catch-all target: route all unknown targets to Sphinx using the new
+# "make mode" option.  $(O) is meant as a shortcut for $(SPHINXOPTS).
+%: Makefile
+	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
 
-TARGET := testing
-# silly way of deploying app branch to github pages
-deploy: build docs
-	test "$(shell git branch --show-current)" = "app"
-	sed -i 's|/assets/|assets/|g' dist/index.html
-	git rm -r --ignore-unmatch docs/$(TARGET)
-	mkdir -p docs/$(TARGET)
-	cp -r dist/* docs/$(TARGET)
-	git add docs/$(TARGET)
-	git add docs/index.html
-	git commit -m "deploy $(TARGET)"
-
-.PHONY: run host install build docs deploy
+.PHONY: help run host check install build

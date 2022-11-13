@@ -5,6 +5,7 @@ Piste on Piste
    :maxdepth: 1
    :caption: Contents:
 
+   three-player-snooker-rules
 
 This is an early playground for `Piste on Piste`_, a scoreboard app for three
 player snooker.

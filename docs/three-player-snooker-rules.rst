@@ -1,6 +1,8 @@
 .. SPDX-License-Identifier: CC-BY-SA-4.0
 .. Copyright (c) 2022 Jani Nikula <jani@nikula.org>
 
+.. _rules-en:
+
 Three Player Snooker Rules
 ==========================
 

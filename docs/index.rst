@@ -4,7 +4,7 @@ Piste on Piste
 If you're looking for a new take on **three-player snooker rules**, and a
 **scoreboard app** to go with them, you've found the right place.
 
-Read the :ref:`rules-en`.
+Read the :ref:`rules-en`, or the Finnish translation :ref:`rules-fi`.
 
 Launch the development version of the `Piste on Piste scoreboard app`_.
 
@@ -36,3 +36,4 @@ app, please see the `Piste on Piste GitHub project page`_.
    :caption: Contents:
 
    three-player-snooker-rules
+   kolmen-pelaajan-snooker-saannot

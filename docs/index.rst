@@ -13,8 +13,7 @@ internet connection is not required. All state is stored in browser local
 storage only, and never sent anywhere. The app currently works best in tablet
 size screens in landscape.
 
-The app manual is still a work-in-progress, but it should be fairly
-self-explanatory.
+There's a rudimentary :ref:`manual` for the app, covering the basics.
 
 .. warning::
 
@@ -35,5 +34,6 @@ app, please see the `Piste on Piste GitHub project page`_.
    :maxdepth: 1
    :caption: Contents:
 
+   manual
    three-player-snooker-rules
    kolmen-pelaajan-snooker-saannot

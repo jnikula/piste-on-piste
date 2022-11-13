@@ -9,13 +9,12 @@ JavaScript and `Svelte`_. There's no internet connection required besides
 loading the page. All state is stored in browser local storage only, and never
 sent anywhere.
 
-There's a `playground`_ for trying out the app.
-
-*More info to come.*
+The documentation, rules, and the scoreboard app are continuously deployed in
+`GitHub Pages`_. Check it out!
 
 .. _Svelte: https://svelte.dev/
 
-.. _playground: https://jnikula.github.io/piste-on-piste/
+.. _GitHub Pages: https://jnikula.github.io/piste-on-piste/
 
 License
 -------

@@ -10,7 +10,8 @@ Launch the development version of the `Piste on Piste scoreboard app`_.
 
 The scoreboard app is a fairly simple single-page application. After launching,
 internet connection is not required. All state is stored in browser local
-storage only, and never sent anywhere.
+storage only, and never sent anywhere. The app currently works best in tablet
+size screens in landscape.
 
 The app manual is still a work-in-progress, but it should be fairly
 self-explanatory.

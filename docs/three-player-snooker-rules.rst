@@ -3,7 +3,7 @@
 
 .. _rules-en:
 
-Three Player Snooker Rules
+Three-Player Snooker Rules
 ==========================
 
 :Authors: Tuomas Jäntti, Mikko Neuvonen, Jani Nikula
@@ -36,7 +36,7 @@ rules, and the player with the highest score wins. On fouls, penalty points will
 be awarded either to the preceding player, or both other players, depending on
 the case, as described later.
 
-The main difference to other three player snooker rules out there is that the
+The main difference to other three-player snooker rules out there is that the
 order of play is not fixed. Instead, there are *rounds* of one turn per
 player. On every round, the order of play will be from the player with the least
 points scored to the player with most points.

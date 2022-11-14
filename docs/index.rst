@@ -1,7 +1,7 @@
 Piste on Piste
 ==============
 
-If you're looking for a new take on **three player snooker rules**, and a
+If you're looking for a new take on **three-player snooker rules**, and a
 **scoreboard app** to go with them, you've found the right place.
 
 Read the :ref:`rules-en`.

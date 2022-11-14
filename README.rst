@@ -1,4 +1,4 @@
-Three Player Snooker Rules and Scoreboard App
+Three-Player Snooker Rules and Scoreboard App
 =============================================
 
 This project contains special snooker rule adaptation for three players, and a

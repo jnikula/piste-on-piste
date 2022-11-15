@@ -103,6 +103,8 @@ infringements:
 #. Foul on any stroke of a turn that is the second consecutive turn of the
    offending player, due to a change in order of play.
 
+#. `Playing Out of Turn`_.
+
 #. Penalties.
 
 

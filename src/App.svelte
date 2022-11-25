@@ -312,7 +312,84 @@
   function ui_name_input_card_style(name: string): string {
     return ui_start_name_valid(name) ? '' : 'retake'; // FIXME
   }
+
+  // UI key events
+
+  function ui_key_end_turn(): void {
+    let s: State = state.deepcopy();
+
+    if (state.can_end_turn())
+      s.end_turn();
+
+    state = undo_stack_push(s)
+  }
+
+  function ui_key_pot_ball(value: number): void {
+    if (state.can_pot_ball(value))
+      ui_pot_ball(value);
+  }
+
+  function ui_key_undo(): void {
+    if (ui_can_undo)
+      ui_undo();
+  }
+
+  function ui_key_redo(): void {
+    if (ui_can_redo)
+      ui_redo();
+  }
+
+  function ui_key_plus_balls(): void {
+    if (state.can_plus_balls())
+      ui_plus_balls();
+  }
+
+  function ui_key_minus_balls(): void {
+    if (state.can_minus_balls())
+      ui_minus_balls();
+  }
+
+  function ui_key_down(event) {
+    if (event.repeat)
+      return;
+
+    console.log(`key "${event.key}" code "${event.keyCode}"`);
+
+    if (ui_page == UiPage.START)
+      return;
+
+    if (event.key == 'ArrowRight') {
+      ui_next_page();
+      return;
+    }
+
+    if (ui_page == UiPage.PLAY) {
+      // FIXME: add key bindings for fouls
+
+      let value: number = parseInt(event.key);
+
+      if (value >= 1 && value <= 7) {
+	ui_key_pot_ball(value);
+      } else if (event.key == ' ') {
+	ui_key_end_turn();
+      } else if (event.key == 'z') {
+	ui_key_undo();
+      } else if (event.key == 'y') {
+	ui_key_redo();
+      }
+    } else if (ui_page == UiPage.MORE) {
+    } else if (ui_page == UiPage.EDIT) {
+      if (event.key == '+') {
+	ui_key_plus_balls();
+      } else if (event.key == '-') {
+	ui_key_minus_balls();
+      }
+    }
+  }
+
 </script>
+
+<svelte:window on:keydown={ui_key_down} />
 
 <main>
   {#if ui_page == UiPage.START }

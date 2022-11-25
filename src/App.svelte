@@ -315,6 +315,24 @@
 
   // UI key events
 
+  let ui_key_modifier: string = null;
+  let ui_key_modifier_timestamp: number = 0;
+
+  function ui_key_modifier_set(value: string): void {
+    ui_key_modifier = value;
+    ui_key_modifier_timestamp = Date.now();
+  }
+
+  function ui_key_modifier_get(): string {
+    let age_ms: number = Date.now() - ui_key_modifier_timestamp;
+    let value: string = age_ms < 1000 * 5 ? ui_key_modifier : null;
+
+    ui_key_modifier = null;
+    ui_key_modifier_timestamp = 0;
+
+    return value;
+  }
+
   function ui_key_end_turn(): void {
     let s: State = state.deepcopy();
 
@@ -327,6 +345,11 @@
   function ui_key_pot_ball(value: number): void {
     if (state.can_pot_ball(value))
       ui_pot_ball(value);
+  }
+
+  function ui_key_commit_foul(value: number): void {
+    if (state.can_commit_foul(value))
+      ui_commit_foul(value);
   }
 
   function ui_key_undo(): void {
@@ -353,6 +376,8 @@
     if (event.repeat)
       return;
 
+    let modifier: string = ui_key_modifier_get();
+
     console.log(`key "${event.key}" code "${event.keyCode}"`);
 
     if (ui_page == UiPage.START)
@@ -364,18 +389,23 @@
     }
 
     if (ui_page == UiPage.PLAY) {
-      // FIXME: add key bindings for fouls
-
       let value: number = parseInt(event.key);
 
       if (value >= 1 && value <= 7) {
-	ui_key_pot_ball(value);
+	if (modifier == 'f') {
+	  if (value >= 4)
+	    ui_key_commit_foul(value);
+	} else {
+	  ui_key_pot_ball(value);
+	}
       } else if (event.key == ' ') {
 	ui_key_end_turn();
       } else if (event.key == 'z') {
 	ui_key_undo();
       } else if (event.key == 'y') {
 	ui_key_redo();
+      } else if (event.key == 'f') {
+	ui_key_modifier_set(event.key);
       }
     } else if (ui_page == UiPage.MORE) {
     } else if (ui_page == UiPage.EDIT) {

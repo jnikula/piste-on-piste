@@ -280,6 +280,17 @@
     state = undo_stack_push(s);
   }
 
+  function ui_player_edit_points(pid: number, amount: number): void {
+    let s: State = state.deepcopy();
+
+    if (state.can_player_edit_points(pid, amount))
+      s.player_edit_points(pid, amount);
+    else
+      return;
+
+    state = undo_stack_push(s);
+  }
+
   function ui_new_frame(): void {
     if (!state.can_new_frame())
       return;
@@ -617,7 +628,10 @@
 	  {:else}
 	    <div>({player.last_break})</div>
 	  {/if}
-	  <div></div>
+	  <div class='double-button'>
+	    <div class='card-button' on:click={() => ui_player_edit_points(player.pid, -1)}>-</div>
+	    <div class='card-button' on:click={() => ui_player_edit_points(player.pid, 1)}>+</div>
+	  </div>
 	</div>
       {/each}
       <div class='button-bar'>
@@ -693,6 +707,13 @@
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: 1fr 1fr 3fr 1fr 1fr;
+  }
+
+  .double-button {
+    display: grid;
+    grid-template-columns: 50% 50%;
+    grid-template-rows: 100%;
+    border-radius: inherit;
   }
 
   .info-card {

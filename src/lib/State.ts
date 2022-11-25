@@ -523,6 +523,21 @@ class State {
 
     // Note: No end turn!
   }
+
+  can_player_edit_points(pid: number, amount: number): boolean {
+    let p: Player = this._get_player_by_pid(pid);
+
+    return p.points + amount >= 0;
+  }
+
+  player_edit_points(pid: number, amount: number): void {
+    console.assert(this.can_player_edit_points(pid, amount));
+
+    let p: Player = this._get_player_by_pid(pid);
+
+    // FIXME: maybe don't adjust player points here directly
+    p.points = p.points + amount;
+  }
 }
 
 export default State;

@@ -8,7 +8,7 @@ const csscolors = {
   3: 'green',
   4: 'saddlebrown',
   5: 'blue',
-  6: 'pink',
+  6: 'hotpink',
   7: 'black',
 };
 

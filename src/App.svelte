@@ -646,14 +646,14 @@
       <div class='button-bar'>
 	<div class='label'>Fix</div>
 	<Ball value={0}
-	      active={state.can_plus_balls()}
-	      action={() => ui_plus_balls()}>
-	  +
-	</Ball>
-	<Ball value={0}
 	      active={state.can_minus_balls()}
 	      action={() => ui_minus_balls()}>
 	  -
+	</Ball>
+	<Ball value={0}
+	      active={state.can_plus_balls()}
+	      action={() => ui_plus_balls()}>
+	  +
 	</Ball>
       </div>
     </div>

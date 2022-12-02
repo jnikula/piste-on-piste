@@ -25,3 +25,11 @@ exclude_patterns = ['_build']
 
 html_theme = 'alabaster'
 html_static_path = ['_static']
+
+html_theme_options = {
+    'description': 'Three-player snooker rules and a scoreboard app',
+    'extra_nav_links': {
+        'Scoreboard App': 'testing',
+        'GitHub Project': 'https://github.com/jnikula/piste-on-piste',
+    }
+}

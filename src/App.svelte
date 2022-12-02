@@ -734,6 +734,7 @@
 
   .score-card-points {
     font-size: 300%;
+    font-weight: bold;
   }
 
   .score-card-break {

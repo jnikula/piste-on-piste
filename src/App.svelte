@@ -666,7 +666,8 @@
     background: black;
     color: white;
     font-family: sans-serif;
-    font-size: 200%;
+    /* https://css-tricks.com/fitting-text-to-a-container */
+    font-size: 2vw;
     text-align: center;
     text-transform: uppercase;
   }

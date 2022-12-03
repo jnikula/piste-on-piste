@@ -532,7 +532,7 @@ class State {
   }
 
   can_foul_retake(): boolean {
-    return this.foul && !this._is_frame_over();
+    return this.foul && !this._is_frame_over() && !this.respot_black;
   }
 
   foul_retake(): void {

@@ -21,7 +21,7 @@ class State {
 
   // frame
   timestamp: number;
-  turn_timestamp: number;
+  _turn_timestamp: number = 0;
   _end_timestamp: number = 0;
   _num_balls: number = MAX_BALLS;
 
@@ -45,7 +45,6 @@ class State {
   constructor(names=null, source: Object = null) {
     // frame
     this.timestamp = Date.now();
-    this.turn_timestamp = this.timestamp;
 
     for (let pid of [0,1,2]) {
       let name: string;
@@ -283,9 +282,11 @@ class State {
 
   _log_player_time(): void {
     const now = Date.now();
-    const turn_duration = now - this.turn_timestamp;
 
-    this.turn_timestamp = now;
+    // Log zero duration for the first shot
+    const turn_duration = this._turn_timestamp ? now - this._turn_timestamp : 0;
+
+    this._turn_timestamp = now;
 
     let p = this.current_player();
     p.log_time(turn_duration);
@@ -482,7 +483,7 @@ class State {
 
     // frame
     this.timestamp = Date.now();
-    this.turn_timestamp = this.timestamp;
+    this._turn_timestamp = 0;
     this._end_timestamp = 0;
     this._num_balls = MAX_BALLS;
 

@@ -167,9 +167,7 @@
   let frame_time: string = '';
 
   function update_frame_time(): void {
-    const diff: number = Date.now() - state.timestamp;
-
-    frame_time = timeutil.format_ms(diff);
+    frame_time = timeutil.format_ms(state.get_frame_time());
     setTimeout(update_frame_time, 1000);
   }
 

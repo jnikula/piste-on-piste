@@ -22,6 +22,7 @@ class State {
   // frame
   timestamp: number;
   turn_timestamp: number;
+  _end_timestamp: number = 0;
   _num_balls: number = MAX_BALLS;
 
   cur_pos: number = 0;
@@ -273,6 +274,13 @@ class State {
     return [...this.players].sort((p1, p2) => p1.compare(p2));
   }
 
+  get_frame_time(): number {
+    if (this._is_frame_over())
+      return this._end_timestamp - this.timestamp;
+    else
+      return Date.now() - this.timestamp;
+  }
+
   _log_player_time(): void {
     const now = Date.now();
     const turn_duration = now - this.turn_timestamp;
@@ -448,6 +456,8 @@ class State {
   }
 
   _end_frame(): void {
+    this._end_timestamp = Date.now();
+
     this.num_frames++;
 
     for (let p of this.players) {
@@ -473,6 +483,7 @@ class State {
     // frame
     this.timestamp = Date.now();
     this.turn_timestamp = this.timestamp;
+    this._end_timestamp = 0;
     this._num_balls = MAX_BALLS;
 
     this.cur_pos = 0;

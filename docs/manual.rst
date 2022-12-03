@@ -89,7 +89,7 @@ Press the snooker ball buttons to pot (numbers **1-7** on the keyboard).
   the number of balls left on the `Edit Page`_.
 
 * If, after all balls have been potted, two (or all) players have equal points,
-  the game continues with a re-spotted black.
+  the game continues with a re-spotted black. The app reminds you to re-spot it.
 
 Press the foul ball buttons to enter fouls (**f** key immediately followed by
 numbers **4-7** on the keyboard).
@@ -105,7 +105,7 @@ numbers **4-7** on the keyboard).
 
 * If there's a foul with just the last black remaining, the frame ends. If two
   (or all) players have equal points, the game continues with a re-spotted
-  black.
+  black. The app reminds you to re-spot it.
 
 Press the **END TURN** button to end turn (space bar on the beyboard). Fouls end
 turn automatically.

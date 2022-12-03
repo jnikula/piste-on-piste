@@ -528,6 +528,9 @@
 		active={state.can_pot_ball(value)}
 		action={() => ui_pot_ball(value)}>
 	    {value}
+	    {#if value === 7 && state.respot_black }
+	      <div class='respot'>re-spot!</div>
+	    {/if}
 	  </Ball>
 	{/each}
       </div>
@@ -779,6 +782,15 @@
 
   .retake {
     border-color: red;
+  }
+
+  .respot {
+    background-image: linear-gradient(30deg, gray, white);
+    border-style: solid;
+    border-color: red;
+    border-radius: 2vmin;
+    border-width: 0.5vmin;
+    align-items: center;
   }
 
   .unavailable {

@@ -31,6 +31,7 @@ class State {
   red: boolean = false;
   foul: boolean = false;
   retake: boolean = false;
+  respot_black: boolean = false;
 
   players: Player[] = [];
 
@@ -304,6 +305,7 @@ class State {
     this.red = false;
     this.foul = false;
     this.retake = false;
+    this.respot_black = false;
 
     this._detect_win_lose();
 
@@ -348,10 +350,12 @@ class State {
     }
 
     // end frame or respot black?
-    if (this._is_frame_over())
+    if (this._is_frame_over()) {
       this._end_frame();
-    else if (this.num_colors() === 0)
+    } else if (this.num_colors() === 0) {
       this._num_balls++;
+      this.respot_black = true;
+    }
   }
 
   _pot_points(points: number): void {
@@ -493,6 +497,7 @@ class State {
     this.red = false;
     this.foul = false;
     this.retake = false;
+    this.respot_black = false;
 
     for (let p of this.players) {
       let pos: number = permutations[this.cur_perm].indexOf(p.pid);

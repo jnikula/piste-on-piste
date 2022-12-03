@@ -337,6 +337,12 @@ class State {
       this.cur_pid = player.pid;
       this.cur_pos = player.pos;
     }
+
+    // end frame or respot black?
+    if (this._is_frame_over())
+      this._end_frame();
+    else if (this.num_colors() === 0)
+      this._num_balls++;
   }
 
   _pot_points(points: number): void {
@@ -345,9 +351,10 @@ class State {
     let p: Player = this.current_player();
     p.pot_points(points);
 
-    // game over
     if (this.num_points() === 0)
       this._end_turn();
+    else
+      this._detect_win_lose();
   }
 
   _can_pot_red(): boolean {
@@ -423,6 +430,10 @@ class State {
 
     player.log_foul(value);
 
+    // foul on last black, drop ball count to zero to cause end frame
+    if (this.num_colors() === 1)
+      this._num_balls--;
+
     this._end_turn();
 
     this.foul = true;
@@ -454,9 +465,6 @@ class State {
   }
 
   new_frame(): void {
-    // FIXME: this should happen earlier, when frame is over
-    this._end_frame();
-
     // game
     this.cur_perm++;
     if (this.cur_perm >= permutations.length)

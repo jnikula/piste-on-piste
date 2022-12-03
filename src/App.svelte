@@ -390,13 +390,13 @@
       ui_minus_balls();
   }
 
-  function ui_key_down(event) {
+  function ui_key_down(event: KeyboardEvent) {
     if (event.repeat)
       return;
 
     let modifier: string = ui_key_modifier_get();
 
-    console.log(`key "${event.key}" code "${event.keyCode}"`);
+    console.log(`key "${event.key}"`);
 
     if (ui_page == UiPage.START)
       return;

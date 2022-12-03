@@ -299,7 +299,17 @@ class State {
     let p: Player = this.current_player();
     p.end_turn();
 
-    let retake: boolean = this.retake;
+    this._detect_win_lose();
+
+    let requested_retake: Player = null;
+    if (this.retake) {
+      requested_retake = this._get_player_by_pos(this.cur_pos);
+
+      // If the player who requested to play again dropped as winner or loser
+      // during the play again, skip their turn
+      if (requested_retake.winner || requested_retake.loser)
+	requested_retake = null;
+    }
 
     this.prev_pid = this.cur_pid;
     this.red = false;
@@ -307,14 +317,11 @@ class State {
     this.retake = false;
     this.respot_black = false;
 
-    this._detect_win_lose();
-
     if (this._num_players_left() === 1) {
       for (const [pos, p] of this._sorted_players().entries())
 	p.pos = pos;
-    } else if (retake) {
-      p = this._get_player_by_pos(this.cur_pos);
-      this.cur_pid = p.pid;
+    } else if (requested_retake) {
+      this.cur_pid = requested_retake.pid;
     } else if (this._num_players_left() === 3) {
       this.cur_pos++;
 

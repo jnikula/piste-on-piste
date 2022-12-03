@@ -2,43 +2,18 @@
 <!-- Copyright (c) 2022 Jani Nikula <jani@nikula.org> -->
 <script lang='ts'>
   import { flip } from 'svelte/animate';
+  import * as fullscreen from './lib/fullscreen';
   import * as timeutil from './lib/time-util';
   import Ball from './lib/Ball.svelte';
   import Break from './lib/Break.svelte';
   import State from './lib/State';
   import type Player from './lib/Player';
 
-  function ui_request_fullscreen(elem) {
-    if (elem.requestFullscreen) {
-      elem.requestFullscreen();
-    } else if (elem.webkitRequestFullscreen) { // Safari
-      elem.webkitRequestFullscreen();
-    } else if (elem.msRequestFullscreen) { // IE11
-      elem.msRequestFullscreen();
-    }
-  }
-
-  function ui_exit_fullscreen() {
-    if (document.exitFullscreen) {
-      document.exitFullscreen();
-    } else if (document.webkitExitFullscreen) { // Safari
-      document.webkitExitFullscreen();
-    } else if (document.msExitFullscreen) { // IE11
-      document.msExitFullscreen();
-    }
-  }
-
-  function ui_fullscreen_active() {
-    return (document.fullscreenElement ||
-	    document.webkitFullscreenElement || // Safari
-	    document.msFullscreenElement) // IE11
-  }
-
   function ui_toggle_fullscreen() {
-    if (ui_fullscreen_active())
-      ui_exit_fullscreen();
+    if (fullscreen.is_fullscreen())
+      fullscreen.exit_fullscreen();
     else
-      ui_request_fullscreen(document.documentElement);
+      fullscreen.request_fullscreen(document.documentElement);
   }
 
   // stored names for new games

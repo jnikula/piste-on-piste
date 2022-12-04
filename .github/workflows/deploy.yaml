@@ -25,7 +25,6 @@ jobs:
           node-version: '16'
       - run: npm install
       - run: npm run build
-      - run: sed -i 's|/assets/|assets/|g' dist/index.html
       - uses: actions/upload-artifact@v3
         with:
           name: app-artifact

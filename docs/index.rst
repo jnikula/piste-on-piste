@@ -32,7 +32,7 @@ app, please see the `Piste on Piste GitHub project page`_.
 
 .. toctree::
    :maxdepth: 1
-   :caption: Contents:
+   :hidden:
 
    manual
    three-player-snooker-rules

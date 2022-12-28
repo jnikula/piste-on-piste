@@ -373,8 +373,6 @@ class State {
 
     if (this.num_points() === 0)
       this._end_turn();
-    else
-      this._detect_win_lose();
   }
 
   _can_pot_red(): boolean {

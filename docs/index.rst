@@ -6,7 +6,7 @@ If you're looking for a new take on **three-player snooker rules**, and a
 
 Read the :ref:`rules-en`, or the Finnish translation :ref:`rules-fi`.
 
-Launch the development version of the `Piste on Piste scoreboard app`_.
+Launch the latest release of the `Piste on Piste scoreboard app`_.
 
 The scoreboard app is a fairly simple single-page application. After launching,
 internet connection is not required. All state is stored in browser local
@@ -28,7 +28,7 @@ app, please see the `Piste on Piste GitHub project page`_.
 
 .. _Piste on Piste GitHub project page: https://github.com/jnikula/piste-on-piste
 
-.. _Piste on Piste scoreboard app: testing
+.. _Piste on Piste scoreboard app: stable
 
 .. toctree::
    :maxdepth: 1

@@ -34,6 +34,7 @@ app, please see the `Piste on Piste GitHub project page`_.
    :maxdepth: 1
    :hidden:
 
+   Introduction <self>
    manual
    three-player-snooker-rules
    kolmen-pelaajan-snooker-saannot

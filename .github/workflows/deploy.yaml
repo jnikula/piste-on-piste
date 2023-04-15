@@ -18,8 +18,17 @@ jobs:
 
   build-app:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - ref: main
+            name: app-testing
+          - ref: v0.1.0
+            name: app-stable
     steps:
       - uses: actions/checkout@v3
+        with:
+          ref: ${{ matrix.ref }}
       - uses: actions/setup-node@v3
         with:
           node-version: '16'
@@ -27,7 +36,7 @@ jobs:
       - run: npm run build
       - uses: actions/upload-artifact@v3
         with:
-          name: app-artifact
+          name: ${{ matrix.name }}
           path: dist
           if-no-files-found: error
 
@@ -43,8 +52,12 @@ jobs:
     steps:
       - uses: actions/download-artifact@v3
         with:
-          name: app-artifact
+          name: app-testing
           path: testing
+      - uses: actions/download-artifact@v3
+        with:
+          name: app-stable
+          path: stable
       - uses: actions/download-artifact@v3
         with:
           name: docs-artifact

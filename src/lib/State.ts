@@ -2,6 +2,7 @@
 // Copyright (c) 2022 Jani Nikula <jani@nikula.org>
 
 import Player from './Player';
+import * as timeutil from './time-util';
 
 const MAX_BALLS: number = 15 + 6;
 
@@ -279,13 +280,17 @@ class State {
     return [...this.players].sort((p1, p2) => p1.compare(p2));
   }
 
-  get_frame_time(): number {
+  get_frame_time(): string {
+    let frame_time: number;
+
     if (this._is_frame_over())
-      return this._end_timestamp - this._start_timestamp;
+      frame_time = this._end_timestamp - this._start_timestamp;
     else if (this._has_frame_started())
-      return Date.now() - this._start_timestamp;
+      frame_time = Date.now() - this._start_timestamp;
     else
-      return 0;
+      frame_time = 0;
+
+    return timeutil.format_ms(frame_time);
   }
 
   _log_shot(value: number): void {

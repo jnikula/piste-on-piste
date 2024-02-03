@@ -167,7 +167,7 @@
   let frame_time: string = '';
 
   function update_frame_time(): void {
-    frame_time = timeutil.format_ms(state.get_frame_time());
+    frame_time = state.get_frame_time();
     setTimeout(update_frame_time, 1000);
   }
 

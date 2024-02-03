@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (c) 2024 Jani Nikula <jani@nikula.org>
 
+import { writable } from 'svelte/store';
 import type State from './State';
 
 class Game {
@@ -13,4 +14,10 @@ class Game {
   }
 };
 
-export default Game;
+function create_game(_game: Game) {
+  let { set, update, subscribe } = writable(_game);
+
+  return { set, update, subscribe };
+}
+
+export const game = create_game(new Game());

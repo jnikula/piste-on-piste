@@ -21,8 +21,9 @@ class State {
 
   // frame
   timestamp: number;
-  _turn_timestamp: number = 0;
+  _start_timestamp: number = 0;
   _end_timestamp: number = 0;
+  _shot_timestamp: number = 0;
   _num_balls: number = MAX_BALLS;
 
   cur_pos: number = 0;
@@ -45,7 +46,7 @@ class State {
 
   constructor(names=null, source: Object = null) {
     // frame
-    this.timestamp = Date.now();
+    this.timestamp = Date.now()
 
     for (let pid of [0,1,2]) {
       let name: string;
@@ -246,6 +247,10 @@ class State {
     return this.players.filter((p) => p.loser).length > 0;
   }
 
+  _has_frame_started(): boolean {
+    return this._start_timestamp != 0;
+  }
+
   _is_frame_over(): boolean {
     return this._have_winner() && this._have_loser();
   }
@@ -276,26 +281,32 @@ class State {
 
   get_frame_time(): number {
     if (this._is_frame_over())
-      return this._end_timestamp - this.timestamp;
+      return this._end_timestamp - this._start_timestamp;
+    else if (this._has_frame_started())
+      return Date.now() - this._start_timestamp;
     else
-      return Date.now() - this.timestamp;
+      return 0;
   }
 
-  _log_player_time(): void {
+  _log_shot(value: number): void {
     const now = Date.now();
+    let shot_duration: number;
 
-    // Log zero duration for the first shot
-    const turn_duration = this._turn_timestamp ? now - this._turn_timestamp : 0;
+    if (this._has_frame_started()) {
+      shot_duration = now - this._shot_timestamp;
+    } else {
+      // First shot, start the frame timer, use zero shot duration
+      this._start_timestamp = now
+      shot_duration = 0;
+    }
 
-    this._turn_timestamp = now;
+    this._shot_timestamp = now;
 
     let p = this.current_player();
-    p.log_time(turn_duration);
+    p.log_shot(shot_duration, value);
   }
 
   _end_turn(): void {
-    this._log_player_time();
-
     let p: Player = this.current_player();
     p.end_turn();
 
@@ -420,6 +431,8 @@ class State {
   pot_ball(value: number): void {
     console.log('pot ball: ' + value)
 
+    this._log_shot(value);
+
     if (value === 1)
       this._pot_red();
     else
@@ -432,6 +445,8 @@ class State {
 
   commit_foul(value: number): void {
     console.assert(this.can_commit_foul(value));
+
+    this._log_shot(-value);
 
     let player: Player = this.current_player();
     if (this.prev_pid === -1 ||
@@ -462,6 +477,7 @@ class State {
   }
 
   end_turn(): void {
+    this._log_shot(0);
     this._end_turn();
   }
 
@@ -492,8 +508,9 @@ class State {
 
     // frame
     this.timestamp = Date.now();
-    this._turn_timestamp = 0;
+    this._start_timestamp = 0;
     this._end_timestamp = 0;
+    this._shot_timestamp = 0;
     this._num_balls = MAX_BALLS;
 
     this.cur_pos = 0;
@@ -543,7 +560,7 @@ class State {
   foul_retake(): void {
     console.assert(this.can_foul_retake());
 
-    this._log_player_time()
+    this._log_shot(0)
 
     this.retake = true;
     this.foul = false;

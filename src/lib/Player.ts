@@ -22,6 +22,7 @@ class Player {
   frame_high_break: number = 0;
   frame_balls: number = 0;
   _frame_time: number = 0;
+  _frame_shots: number = 0;
 
   // turn
   _cur_break: number[] = [];
@@ -81,12 +82,16 @@ class Player {
     this._cur_break = [];
   }
 
-  get frame_time(): string {
-    return timeutil.format_ms(this._frame_time);
+  get frame_shot_time(): string {
+    if (this._frame_shots == 0)
+      return '';
+
+    return timeutil.format_ms(this._frame_time / this._frame_shots);
   }
 
-  log_time(duration: number): void {
+  log_shot(duration: number, _value: number): void {
     this._frame_time += duration;
+    this._frame_shots++;
   }
 
   new_frame(pos: number): void {
@@ -100,6 +105,7 @@ class Player {
     this.frame_high_break = 0;
     this.frame_balls = 0;
     this._frame_time = 0;
+    this._frame_shots = 0;
   }
 
   compare(other: Player): number {

@@ -591,7 +591,7 @@
       {/each}
 
       <div class='info-card' on:click={ui_new_frame}>
-	<div>Frame time</div>
+	<div>Frame shot time</div>
 	<div>Frame balls</div>
 	<div>Frame high</div>
 	<div></div>
@@ -605,7 +605,7 @@
       </div>
       {#each state.get_players() as player (player.pid)}
       <div class='info-card'>
-	<div>{ player.frame_time }</div>
+	<div>{ player.frame_shot_time }</div>
 	<div>{ player.frame_balls }</div>
 	<div>{ player.frame_high_break }</div>
 	<div></div>

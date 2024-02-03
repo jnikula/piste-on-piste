@@ -6,6 +6,7 @@
   import * as timeutil from './lib/time-util';
   import Ball from './lib/Ball.svelte';
   import Break from './lib/Break.svelte';
+  import Game from './lib/Game';
   import State from './lib/State';
   import type Player from './lib/Player';
 
@@ -76,21 +77,18 @@
   let ui_names: SavedName[] = setup_names();
 
   // undo stack and current state
-  let undo_stack: State[] = [];
-  let undo_index: number = -1;
-  let save_game_slot: number = 0;
-  let state: State;
+  let game: Game = new Game();
 
   function save_game_name(slot: number): string {
     return `piste-on-piste-save-${slot}`;
   }
 
   function save_game(): void {
-    localStorage.setItem(save_game_name(save_game_slot), JSON.stringify(undo_stack));
+    localStorage.setItem(save_game_name(game.save_game_slot), JSON.stringify(game.undo_stack));
   }
 
   function undo_stack_push(s: State, autosave: boolean = true): State {
-    undo_stack.splice(++undo_index, undo_stack.length, s);
+    game.undo_stack.splice(++game.undo_index, game.undo_stack.length, s);
 
     if (autosave)
       save_game();
@@ -98,19 +96,19 @@
     return s;
   }
 
-  $: ui_can_undo = undo_index > 0;
-  $: ui_can_redo = undo_index + 1 < undo_stack.length;
+  $: ui_can_undo = game.undo_index > 0;
+  $: ui_can_redo = game.undo_index + 1 < game.undo_stack.length;
 
   function ui_undo(): void {
     console.assert(ui_can_undo);
 
-    state = undo_stack[--undo_index];
+    game.state = game.undo_stack[--game.undo_index];
   }
 
   function ui_redo(): void {
     console.assert(ui_can_redo);
 
-    state = undo_stack[++undo_index];
+    game.state = game.undo_stack[++game.undo_index];
   }
 
   type SaveGameId = {
@@ -137,7 +135,7 @@
     saved.sort((s1: SaveGameId, s2: SaveGameId) => s2.timestamp - s1.timestamp);
 
     // save new game in the oldest slot
-    save_game_slot = saved[saved.length - 1].slot;
+    game.save_game_slot = saved[saved.length - 1].slot;
 
     return saved;
   }
@@ -152,14 +150,14 @@
     let source = JSON.parse(json);
 
     for (let s of source)
-      undo_stack.push(new State(null, s));
+      game.undo_stack.push(new State(null, s));
 
-    undo_index = undo_stack.length - 1;
+    game.undo_index = game.undo_stack.length - 1;
 
     // save this in the same slot
-    save_game_slot = slot;
+    game.save_game_slot = slot;
 
-    return undo_stack[undo_index];
+    return game.undo_stack[game.undo_index];
   }
 
   // Hack to "live update" generic stuff once per second
@@ -188,8 +186,8 @@
   }
 
   function ui_load_game(slot: number): void {
-    state = load_game(slot);
-    if (!state) {
+    game.state = load_game(slot);
+    if (!game.state) {
       console.log(`slot ${slot} not found`);
       return;
     }
@@ -214,10 +212,10 @@
     if (!ui_can_new_game)
       return;
 
-    state = new State(ui_names);
+    game.state = new State(ui_names);
 
     // Don't autosave before first shot
-    undo_stack_push(state, false);
+    undo_stack_push(game.state, false);
 
     save_names(ui_names);
 
@@ -232,81 +230,81 @@
 
   // ui actions, each need to handle undo
   function ui_pot_ball(value: number): void {
-    let s: State = state.deepcopy();
+    let s: State = game.state.deepcopy();
     s.pot_ball(value);
-    state = undo_stack_push(s);
+    game.state = undo_stack_push(s);
   }
 
   function ui_plus_balls(): void {
-    let s: State = state.deepcopy();
+    let s: State = game.state.deepcopy();
     s.plus_balls();
-    state = undo_stack_push(s);
+    game.state = undo_stack_push(s);
   }
 
   function ui_minus_balls(): void {
-    let s: State = state.deepcopy();
+    let s: State = game.state.deepcopy();
     s.minus_balls();
-    state = undo_stack_push(s);
+    game.state = undo_stack_push(s);
   }
 
   function ui_commit_foul(value: number): void {
-    let s: State = state.deepcopy();
+    let s: State = game.state.deepcopy();
     s.commit_foul(value);
-    state = undo_stack_push(s);
+    game.state = undo_stack_push(s);
   }
 
   function ui_click_player(player: Player): void {
-    let s: State = state.deepcopy();
+    let s: State = game.state.deepcopy();
 
     // FIXME: don't duplicate the conditions here and in html
-    if (state.is_current_player(player.pid) && state.can_end_turn())
+    if (game.state.is_current_player(player.pid) && game.state.can_end_turn())
       s.end_turn();
-    else if (state.can_foul_retake() && state.is_previous_player(player.pid))
+    else if (game.state.can_foul_retake() && game.state.is_previous_player(player.pid))
       s.foul_retake();
     else
       return;
 
-    state = undo_stack_push(s);
+    game.state = undo_stack_push(s);
   }
 
   function ui_click_player_more(player: Player): void {
-    let s: State = state.deepcopy();
+    let s: State = game.state.deepcopy();
 
     // FIXME: don't duplicate the conditions here and in html
-    if (state.can_concede(player.pid))
+    if (game.state.can_concede(player.pid))
       s.concede(player.pid);
-    else if (state.can_declare_winner(player.pid))
+    else if (game.state.can_declare_winner(player.pid))
       s.declare_winner(player.pid);
     else
       return;
 
-    state = undo_stack_push(s);
+    game.state = undo_stack_push(s);
   }
 
   function ui_player_edit_points(pid: number, amount: number): void {
-    let s: State = state.deepcopy();
+    let s: State = game.state.deepcopy();
 
-    if (state.can_player_edit_points(pid, amount))
+    if (game.state.can_player_edit_points(pid, amount))
       s.player_edit_points(pid, amount);
     else
       return;
 
-    state = undo_stack_push(s);
+    game.state = undo_stack_push(s);
   }
 
   function ui_new_frame(): void {
-    if (!state.can_new_frame())
+    if (!game.state.can_new_frame())
       return;
 
-    let s: State = state.deepcopy();
+    let s: State = game.state.deepcopy();
     s.new_frame();
-    state = undo_stack_push(s);
+    game.state = undo_stack_push(s);
 
     ui_page = UiPage.PLAY;
   }
 
   function ui_score_card_player_style(player: Player): string {
-    if (state._is_frame_over()) {
+    if (game.state._is_frame_over()) {
       if (player.winner)
 	return 'first-place';
       else if (player.loser)
@@ -315,8 +313,8 @@
 	return 'second-place';
     }
 
-    if (state.is_current_player(player.pid))
-      return state.retake ? 'retake' : 'active';
+    if (game.state.is_current_player(player.pid))
+      return game.state.retake ? 'retake' : 'active';
     else if (player.winner || player.loser)
       return 'unavailable';
     else
@@ -348,21 +346,21 @@
   }
 
   function ui_key_end_turn(): void {
-    let s: State = state.deepcopy();
+    let s: State = game.state.deepcopy();
 
-    if (state.can_end_turn())
+    if (game.state.can_end_turn())
       s.end_turn();
 
-    state = undo_stack_push(s)
+    game.state = undo_stack_push(s)
   }
 
   function ui_key_pot_ball(value: number): void {
-    if (state.can_pot_ball(value))
+    if (game.state.can_pot_ball(value))
       ui_pot_ball(value);
   }
 
   function ui_key_commit_foul(value: number): void {
-    if (state.can_commit_foul(value))
+    if (game.state.can_commit_foul(value))
       ui_commit_foul(value);
   }
 
@@ -377,12 +375,12 @@
   }
 
   function ui_key_plus_balls(): void {
-    if (state.can_plus_balls())
+    if (game.state.can_plus_balls())
       ui_plus_balls();
   }
 
   function ui_key_minus_balls(): void {
-    if (state.can_minus_balls())
+    if (game.state.can_minus_balls())
       ui_minus_balls();
   }
 
@@ -491,28 +489,28 @@
   {:else if ui_page == UiPage.PLAY }
     <div class='grid-container'>
       <div class='score-card' on:click={ui_next_page}>
-	<div>{ live_update(state.get_frame_time()) }</div>
-	<div>Frames ({state.num_frames})</div>
+	<div>{ live_update(game.state.get_frame_time()) }</div>
+	<div>Frames ({game.state.num_frames})</div>
 	<div>
 	  Points
-	  <div>(Remaining {state.num_points()})</div>
+	  <div>(Remaining {game.state.num_points()})</div>
 	</div>
 	<div>Break</div>
 	<div class='card-button'>&bull;&bull;&bull;</div>
       </div>
-      {#each state.get_players() as player (player.pid)}
+      {#each game.state.get_players() as player (player.pid)}
 	<div class='score-card {ui_score_card_player_style(player)}' on:click={() => ui_click_player(player)} animate:flip='{{ duration: (d) => d * 2 }}'>
 	  <div>{player.name}</div>
 	  <div>{player.frame_1st} - {player.frame_2nd} - {player.frame_3rd}</div>
 	  <div class='score-card-points'>{player.points}</div>
-	  {#if state.is_current_player(player.pid)}
+	  {#if game.state.is_current_player(player.pid)}
 	    <div>{player.cur_break}</div>
 	  {:else}
 	    <div>({player.last_break})</div>
 	  {/if}
-	  {#if state.is_current_player(player.pid) && state.can_end_turn() }
+	  {#if game.state.is_current_player(player.pid) && game.state.can_end_turn() }
 	    <div class='card-button'>End Turn</div>
-	  {:else if state.can_foul_retake() && state.is_previous_player(player.pid) }
+	  {:else if game.state.can_foul_retake() && game.state.is_previous_player(player.pid) }
 	    <div class='card-button'>Play Again</div>
 	  {:else}
 	    <div></div>
@@ -523,10 +521,10 @@
 	<div class='label'>Pot</div>
 	{#each [1,2,3,4,5,6,7] as value}
 	  <Ball value={value}
-		active={state.can_pot_ball(value)}
+		active={game.state.can_pot_ball(value)}
 		action={() => ui_pot_ball(value)}>
 	    {value}
-	    {#if value === 7 && state.respot_black }
+	    {#if value === 7 && game.state.respot_black }
 	      <div class='respot'>re-spot!</div>
 	    {/if}
 	  </Ball>
@@ -549,7 +547,7 @@
 	<div class='label'>Foul</div>
 	{#each [4,5,6,7] as value}
 	  <Ball value={0}
-		active={state.can_commit_foul(value)}
+		active={game.state.can_commit_foul(value)}
 		action={() => ui_commit_foul(value)}>
 	    {value}
 	  </Ball>
@@ -559,28 +557,28 @@
   {:else if ui_page == UiPage.MORE }
     <div class='grid-container'>
       <div class='score-card' on:click={ui_next_page}>
-	<div>{ live_update(state.get_frame_time()) }</div>
-	<div>Frames ({state.num_frames})</div>
+	<div>{ live_update(game.state.get_frame_time()) }</div>
+	<div>Frames ({game.state.num_frames})</div>
 	<div>
 	  Points
-	  <div>(Remaining {state.num_points()})</div>
+	  <div>(Remaining {game.state.num_points()})</div>
 	</div>
 	<div>Break</div>
 	<div class='card-button'>Edit</div>
       </div>
-      {#each state.get_players() as player (player.pid)}
+      {#each game.state.get_players() as player (player.pid)}
 	<div class='score-card {ui_score_card_player_style(player)}' on:click={() => ui_click_player_more(player)}>
 	  <div>{player.name}</div>
 	  <div>{player.frame_1st} - {player.frame_2nd} - {player.frame_3rd}</div>
 	  <div class='score-card-points'>{player.points}</div>
-	  {#if state.is_current_player(player.pid)}
+	  {#if game.state.is_current_player(player.pid)}
 	    <div class='score-card-break'><Break balls={player._cur_break}></Break></div>
 	  {:else}
 	    <div class='score-card-break'><Break balls={player._last_break}></Break></div>
 	  {/if}
-	  {#if state.can_concede(player.pid) }
+	  {#if game.state.can_concede(player.pid) }
 	    <div class='card-button'>Concede</div>
-	  {:else if state.can_declare_winner(player.pid) }
+	  {:else if game.state.can_declare_winner(player.pid) }
 	    <div class='card-button'>Set Winner</div>
 	  {:else}
 	    <div></div>
@@ -595,13 +593,13 @@
 	<div>Time since last pot</div>
 	<div>Game balls</div>
 	<div>Game high</div>
-	{#if state.can_new_frame() }
+	{#if game.state.can_new_frame() }
 	  <div class='card-button'>New frame</div>
 	{:else}
 	  <div></div>
 	{/if}
       </div>
-      {#each state.get_players() as player (player.pid)}
+      {#each game.state.get_players() as player (player.pid)}
       <div class='info-card'>
 	<div>{ player.frame_shot_time }</div>
 	<div>{ player.frame_balls }</div>
@@ -615,21 +613,21 @@
   {:else}
     <div class='grid-container'>
       <div class='score-card' on:click={ui_next_page}>
-	<div>{ live_update(state.get_frame_time()) }</div>
-	<div>Frames ({state.num_frames})</div>
+	<div>{ live_update(game.state.get_frame_time()) }</div>
+	<div>Frames ({game.state.num_frames})</div>
 	<div>
 	  Points
-	  <div>(Remaining {state.num_points()})</div>
+	  <div>(Remaining {game.state.num_points()})</div>
 	</div>
 	<div>Break</div>
 	<div class='card-button'>Continue</div>
       </div>
-      {#each state.get_players() as player (player.pid)}
+      {#each game.state.get_players() as player (player.pid)}
 	<div class='score-card {ui_score_card_player_style(player)}'>
 	  <div>{player.name}</div>
 	  <div>{player.frame_1st} - {player.frame_2nd} - {player.frame_3rd}</div>
 	  <div class='score-card-points'>{player.points}</div>
-	  {#if state.is_current_player(player.pid)}
+	  {#if game.state.is_current_player(player.pid)}
 	    <div>{player.cur_break}</div>
 	  {:else}
 	    <div>({player.last_break})</div>
@@ -645,19 +643,19 @@
 	{#each [1,2,3,4,5,6,7] as value}
 	  <Ball value={value}
 		active={false}>
-	    {state.num_balls(value)}
+	    {game.state.num_balls(value)}
 	  </Ball>
 	{/each}
       </div>
       <div class='button-bar'>
 	<div class='label'>Fix</div>
 	<Ball value={0}
-	      active={state.can_minus_balls()}
+	      active={game.state.can_minus_balls()}
 	      action={() => ui_minus_balls()}>
 	  -
 	</Ball>
 	<Ball value={0}
-	      active={state.can_plus_balls()}
+	      active={game.state.can_plus_balls()}
 	      action={() => ui_plus_balls()}>
 	  +
 	</Ball>

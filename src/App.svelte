@@ -93,17 +93,14 @@
     return s;
   }
 
-  $: ui_can_undo = $game.undo_index > 0;
-  $: ui_can_redo = $game.undo_index + 1 < $game.undo_stack.length;
-
   function ui_undo(): void {
-    console.assert(ui_can_undo);
+    console.assert($game.can_undo);
 
     $game.state = $game.undo_stack[--$game.undo_index];
   }
 
   function ui_redo(): void {
-    console.assert(ui_can_redo);
+    console.assert($game.can_redo);
 
     $game.state = $game.undo_stack[++$game.undo_index];
   }
@@ -362,12 +359,12 @@
   }
 
   function ui_key_undo(): void {
-    if (ui_can_undo)
+    if ($game.can_undo)
       ui_undo();
   }
 
   function ui_key_redo(): void {
-    if (ui_can_redo)
+    if ($game.can_redo)
       ui_redo();
   }
 
@@ -531,12 +528,12 @@
       <div class='button-bar'>
 	<div class='label'>Undo</div>
 	<Ball value={0}
-	      active={ui_can_undo}
+	      active={$game.can_undo}
 	      action={() => ui_undo()}>
 	  &#x21b6;
 	</Ball>
 	<Ball value={0}
-	      active={ui_can_redo}
+	      active={$game.can_redo}
 	      action={() => ui_redo()}>
 	  &#x21b7;
 	</Ball>

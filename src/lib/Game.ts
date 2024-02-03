@@ -12,6 +12,14 @@ class Game {
 
   constructor() {
   }
+
+  get can_undo(): boolean {
+    return this.undo_index > 0;
+  }
+
+  get can_redo(): boolean {
+    return this.undo_index + 1 < this.undo_stack.length;
+  }
 };
 
 function create_game(_game: Game) {

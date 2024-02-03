@@ -456,7 +456,7 @@
       {/each}
 
       <div class='info-card' on:click={ui_new_game}>
-	<div class='info-card-copyright' on:click|stopPropagation={() => false}><a href="https://jnikula.github.io/piste-on-piste/">&copy; 2022 Jani Nikula<br>License: GPL 3.0 or later &#x1f517;</a></div>
+	<div class='info-card-copyright' on:click|stopPropagation={() => false}><a href="https://jnikula.github.io/piste-on-piste/">&copy; 2022-2024 Jani Nikula<br>License: GPL 3.0 or later &#x1f517;</a></div>
 	<div></div>
 	<div>Piste</div>
 	<div>on</div>

@@ -162,13 +162,15 @@
     return undo_stack[undo_index];
   }
 
+  // Hack to "live update" generic stuff once per second
+  let __counter = 0;
+  setInterval(() => __counter++, 1000)
 
-  // frame time update
-  let frame_time: string = '';
-
-  function update_frame_time(): void {
-    frame_time = state.get_frame_time();
-    setTimeout(update_frame_time, 1000);
+  $: live_update = function(thing: string): string {
+    // Do something with __counter to react to changes
+    let dummy = __counter;
+    dummy = dummy
+    return thing;
   }
 
   // ui pages
@@ -194,8 +196,6 @@
 
     save_names(ui_names);
 
-    update_frame_time();
-
     ui_page = UiPage.PLAY;
   }
 
@@ -220,8 +220,6 @@
     undo_stack_push(state, false);
 
     save_names(ui_names);
-
-    update_frame_time();
 
     ui_page = UiPage.PLAY;
   }
@@ -493,7 +491,7 @@
   {:else if ui_page == UiPage.PLAY }
     <div class='grid-container'>
       <div class='score-card' on:click={ui_next_page}>
-	<div>{frame_time}</div>
+	<div>{ live_update(state.get_frame_time()) }</div>
 	<div>Frames ({state.num_frames})</div>
 	<div>
 	  Points
@@ -561,7 +559,7 @@
   {:else if ui_page == UiPage.MORE }
     <div class='grid-container'>
       <div class='score-card' on:click={ui_next_page}>
-	<div>{frame_time}</div>
+	<div>{ live_update(state.get_frame_time()) }</div>
 	<div>Frames ({state.num_frames})</div>
 	<div>
 	  Points
@@ -608,7 +606,7 @@
 	<div>{ player.frame_shot_time }</div>
 	<div>{ player.frame_balls }</div>
 	<div>{ player.frame_high_break }</div>
-	<div>{ player.time_since_last_pot }</div>
+	<div>{ live_update(player.time_since_last_pot) }</div>
 	<div>{ player.game_balls }</div>
 	<div>{ player.game_high_break }</div>
       </div>
@@ -617,7 +615,7 @@
   {:else}
     <div class='grid-container'>
       <div class='score-card' on:click={ui_next_page}>
-	<div>{frame_time}</div>
+	<div>{ live_update(state.get_frame_time()) }</div>
 	<div>Frames ({state.num_frames})</div>
 	<div>
 	  Points

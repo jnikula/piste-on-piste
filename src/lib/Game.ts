@@ -17,15 +17,33 @@ class Game {
     return this.undo_index > 0;
   }
 
+  _undo(): void {
+    console.assert(this.can_undo);
+
+    this.state = this.undo_stack[--this.undo_index];
+  }
+
   get can_redo(): boolean {
     return this.undo_index + 1 < this.undo_stack.length;
+  }
+
+  _redo(): void {
+    console.assert(this.can_redo);
+
+    this.state = this.undo_stack[++this.undo_index];
   }
 };
 
 function create_game(_game: Game) {
   let { set, update, subscribe } = writable(_game);
 
-  return { set, update, subscribe };
+  return {
+    set,
+    update,
+    subscribe,
+    undo: () => update((val) => { val._undo(); return val; }),
+    redo: () => update((val) => { val._redo(); return val; }),
+  };
 }
 
 export const game = create_game(new Game());

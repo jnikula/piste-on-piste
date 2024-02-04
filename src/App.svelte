@@ -93,18 +93,6 @@
     return s;
   }
 
-  function ui_undo(): void {
-    console.assert($game.can_undo);
-
-    $game.state = $game.undo_stack[--$game.undo_index];
-  }
-
-  function ui_redo(): void {
-    console.assert($game.can_redo);
-
-    $game.state = $game.undo_stack[++$game.undo_index];
-  }
-
   type SaveGameId = {
     slot: number;
     timestamp: number;
@@ -360,12 +348,12 @@
 
   function ui_key_undo(): void {
     if ($game.can_undo)
-      ui_undo();
+      game.undo();
   }
 
   function ui_key_redo(): void {
     if ($game.can_redo)
-      ui_redo();
+      game.redo();
   }
 
   function ui_key_plus_balls(): void {
@@ -529,12 +517,12 @@
 	<div class='label'>Undo</div>
 	<Ball value={0}
 	      active={$game.can_undo}
-	      action={() => ui_undo()}>
+	      action={() => game.undo()}>
 	  &#x21b6;
 	</Ball>
 	<Ball value={0}
 	      active={$game.can_redo}
-	      action={() => ui_redo()}>
+	      action={() => game.redo()}>
 	  &#x21b7;
 	</Ball>
 

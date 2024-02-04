@@ -80,15 +80,11 @@
     return `piste-on-piste-save-${slot}`;
   }
 
-  function save_game(): void {
-    localStorage.setItem(save_game_name($game.save_game_slot), JSON.stringify($game.undo_stack));
-  }
-
   function undo_stack_push(s: State, autosave: boolean = true): State {
     $game.undo_stack.splice(++$game.undo_index, $game.undo_stack.length, s);
 
     if (autosave)
-      save_game();
+      game.save();
 
     return s;
   }

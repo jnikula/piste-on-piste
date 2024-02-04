@@ -13,6 +13,14 @@ class Game {
   constructor() {
   }
 
+  save_game_name(): string {
+    return `piste-on-piste-save-${this.save_game_slot}`;
+  }
+
+  _save(): void {
+    localStorage.setItem(this.save_game_name(), JSON.stringify(this.undo_stack));
+  }
+
   get can_undo(): boolean {
     return this.undo_index > 0;
   }
@@ -43,6 +51,7 @@ function create_game(_game: Game) {
     subscribe,
     undo: () => update((val) => { val._undo(); return val; }),
     redo: () => update((val) => { val._redo(); return val; }),
+    save: () => update((val) => { val._save(); return val; }),
   };
 }
 

@@ -594,7 +594,7 @@
 	<div>Frame shot time</div>
 	<div>Frame balls</div>
 	<div>Frame high</div>
-	<div></div>
+	<div>Time since last pot</div>
 	<div>Game balls</div>
 	<div>Game high</div>
 	{#if state.can_new_frame() }
@@ -608,7 +608,7 @@
 	<div>{ player.frame_shot_time }</div>
 	<div>{ player.frame_balls }</div>
 	<div>{ player.frame_high_break }</div>
-	<div></div>
+	<div>{ player.time_since_last_pot }</div>
 	<div>{ player.game_balls }</div>
 	<div>{ player.game_high_break }</div>
       </div>

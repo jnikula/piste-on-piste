@@ -13,6 +13,7 @@ class Player {
 
   game_high_break: number = 0;
   game_balls: number = 0;
+  _game_pot_timestamp: number = 0;
 
   // frame
   pos: number;
@@ -42,6 +43,8 @@ class Player {
   }
 
   pot_points(points: number): void {
+    this._game_pot_timestamp = Date.now()
+
     this.points += points;
     this._cur_break.push(points);
 
@@ -87,6 +90,13 @@ class Player {
       return '';
 
     return timeutil.format_ms(this._frame_time / this._frame_shots);
+  }
+
+  get time_since_last_pot(): string {
+    if (this._game_pot_timestamp == 0)
+      return '';
+
+    return timeutil.format_ms(Date.now() - this._game_pot_timestamp);
   }
 
   log_shot(duration: number, _value: number): void {

@@ -188,6 +188,12 @@
     ui_page = UiPage.PLAY;
   }
 
+  function ui_previous_page(): void {
+    ui_page--;
+    if (ui_page < UiPage.PLAY)
+      ui_page = UiPage.EDIT;
+  }
+
   function ui_next_page(): void {
     ui_page++;
     if (ui_page > UiPage.EDIT)
@@ -322,6 +328,13 @@
     case '-':
       if ($game.state.can_minus_balls())
 	game.minus_balls();
+      break;
+    case 'n':
+      if ($game.state.can_new_frame())
+	game.new_frame();
+      break;
+    case 'ArrowLeft':
+      ui_previous_page();
       break;
     case 'ArrowRight':
       ui_next_page();

@@ -7,6 +7,7 @@
   import Ball from './lib/Ball.svelte';
   import Break from './lib/Break.svelte';
   import { game } from './lib/Game';
+  import { names } from './lib/Names';
   import type Player from './lib/Player';
 
   function ui_toggle_fullscreen() {
@@ -15,65 +16,6 @@
     else
       fullscreen.request_fullscreen(document.documentElement);
   }
-
-  // stored names for new games
-
-  function shuffle(array: any[]): any[] {
-    let result: any[] = [];
-
-    while (array.length) {
-      let index: number = Math.floor(Math.random() * array.length);
-
-      result.push(array[index]);
-      array.splice(index, 1);
-    }
-
-    return result;
-  }
-
-  type SavedName = {
-    id: number;
-    name: string;
-  };
-
-  // save names to local storage
-  function save_names(names: SavedName[]) {
-    localStorage.setItem('piste-on-piste-names', JSON.stringify(names));
-  }
-
-  // load names from local storage
-  function load_names(): SavedName[] {
-    let names_json = localStorage.getItem('piste-on-piste-names');
-
-    if (!names_json)
-      return null;
-
-    try {
-      let names = JSON.parse(names_json);
-
-      if (!Array.isArray(names) || names.length != 3)
-	return null;
-
-      return names;
-    } catch (e) {
-      return null;
-    }
-  }
-
-  function setup_names(): SavedName[] {
-    let names = load_names();
-
-    if (names)
-      return shuffle(names);
-
-    names = [];
-    for (let i of [1,2,3])
-      names.push({ id: i, name: `Player ${i}`});
-
-    return names;
-  }
-
-  let ui_names: SavedName[] = setup_names();
 
   function save_game_name(slot: number): string {
     return `piste-on-piste-save-${slot}`;
@@ -131,39 +73,28 @@
 
   let ui_page = UiPage.START;
 
-  function ui_shuffle_names(): void {
-    ui_names = shuffle(ui_names);
-  }
-
   function ui_load_game(save_game: SaveGameId): void {
     if (!save_game.timestamp)
       return;
 
     game.load(save_game.slot);
 
-    save_names(ui_names);
+    names.save();
 
     ui_page = UiPage.PLAY;
   }
 
-  function ui_start_name_valid(name: string): boolean {
-    if (!name)
-      return false;
-
-    let dupes = ui_names.filter((x) => x.name.toUpperCase() === name.toUpperCase());
-
-    return dupes.length === 1;
+  function ui_can_new_game(): boolean {
+    return $names.all_valid();
   }
 
-  $: ui_can_new_game = ui_names.filter((x) => !ui_start_name_valid(x.name)).length === 0;
-
   function ui_new_game(): void {
-    if (!ui_can_new_game)
+    if (!ui_can_new_game())
       return;
 
-    game.new_game(ui_names);
+    game.new_game($names.names);
 
-    save_names(ui_names);
+    names.save();
 
     ui_page = UiPage.PLAY;
   }
@@ -230,7 +161,7 @@
   }
 
   function ui_name_input_card_style(name: string): string {
-    return ui_start_name_valid(name) ? '' : 'retake'; // FIXME
+    return $names.valid_name(name) ? '' : 'retake'; // FIXME
   }
 
   // UI key events
@@ -330,7 +261,7 @@
   {#if ui_page == UiPage.START }
 
     <div class='grid-container'>
-      <div class='name-input-card' on:click={ui_shuffle_names}>
+      <div class='name-input-card' on:click={names.shuffle}>
 	<div>Enter names</div>
 	<div></div>
 	<div></div>
@@ -338,7 +269,7 @@
 	<div></div>
 	<div class='card-button'>Shuffle</div>
       </div>
-      {#each ui_names as player_name (player_name.id)}
+      {#each $names.names as player_name (player_name.id)}
 	<div class='name-input-card {ui_name_input_card_style(player_name.name)}' animate:flip='{{ duration: (d) => d * 2 }}'>
 	  <input class='name-input' size=9 minlength=1 maxlength=10 placeholder='enter name' bind:value='{player_name.name}'/>
 	</div>

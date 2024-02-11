@@ -267,41 +267,6 @@
     return value;
   }
 
-  function ui_key_end_turn(): void {
-    if ($game.state.can_end_turn())
-      game.end_turn();
-  }
-
-  function ui_key_pot_ball(value: number): void {
-    if ($game.state.can_pot_ball(value))
-      game.pot_ball(value);
-  }
-
-  function ui_key_commit_foul(value: number): void {
-    if ($game.state.can_commit_foul(value))
-      game.commit_foul(value);
-  }
-
-  function ui_key_undo(): void {
-    if ($game.can_undo)
-      game.undo();
-  }
-
-  function ui_key_redo(): void {
-    if ($game.can_redo)
-      game.redo();
-  }
-
-  function ui_key_plus_balls(): void {
-    if ($game.state.can_plus_balls())
-      game.plus_balls();
-  }
-
-  function ui_key_minus_balls(): void {
-    if ($game.state.can_minus_balls())
-      game.minus_balls();
-  }
-
   function ui_key_down(event: KeyboardEvent) {
     if (event.repeat)
       return;
@@ -325,30 +290,38 @@
 
       if (value >= 1 && value <= 7) {
 	if (modifier == 'f') {
-	  if (value >= 4)
-	    ui_key_commit_foul(value);
+	  if (value >= 4) {
+	    if ($game.state.can_commit_foul(value))
+	      game.commit_foul(value);
+	  }
 	} else {
-	  ui_key_pot_ball(value);
+	  if ($game.state.can_pot_ball(value))
+	    game.pot_ball(value);
 	}
       }
       break;
     case ' ':
-      ui_key_end_turn();
+      if ($game.state.can_end_turn())
+	game.end_turn();
       break;
     case 'z':
-      ui_key_undo();
+      if ($game.can_undo)
+	game.undo();
       break;
     case 'y':
-      ui_key_redo();
+      if ($game.can_redo)
+	game.redo();
       break;
     case 'f':
       ui_key_modifier_set(event.key);
       break;
     case '+':
-      ui_key_plus_balls();
+      if ($game.state.can_plus_balls())
+	game.plus_balls();
       break;
     case '-':
-      ui_key_minus_balls();
+      if ($game.state.can_minus_balls())
+	game.minus_balls();
       break;
     case 'ArrowRight':
       ui_next_page();

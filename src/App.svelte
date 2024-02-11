@@ -313,12 +313,14 @@
     if (ui_page == UiPage.START)
       return;
 
-    if (event.key == 'ArrowRight') {
-      ui_next_page();
-      return;
-    }
-
-    if (ui_page == UiPage.PLAY) {
+    switch (event.key) {
+    case '1':
+    case '2':
+    case '3':
+    case '4':
+    case '5':
+    case '6':
+    case '7':
       let value: number = parseInt(event.key);
 
       if (value >= 1 && value <= 7) {
@@ -328,22 +330,29 @@
 	} else {
 	  ui_key_pot_ball(value);
 	}
-      } else if (event.key == ' ') {
-	ui_key_end_turn();
-      } else if (event.key == 'z') {
-	ui_key_undo();
-      } else if (event.key == 'y') {
-	ui_key_redo();
-      } else if (event.key == 'f') {
-	ui_key_modifier_set(event.key);
       }
-    } else if (ui_page == UiPage.MORE) {
-    } else if (ui_page == UiPage.EDIT) {
-      if (event.key == '+') {
-	ui_key_plus_balls();
-      } else if (event.key == '-') {
-	ui_key_minus_balls();
-      }
+      break;
+    case ' ':
+      ui_key_end_turn();
+      break;
+    case 'z':
+      ui_key_undo();
+      break;
+    case 'y':
+      ui_key_redo();
+      break;
+    case 'f':
+      ui_key_modifier_set(event.key);
+      break;
+    case '+':
+      ui_key_plus_balls();
+      break;
+    case '-':
+      ui_key_minus_balls();
+      break;
+    case 'ArrowRight':
+      ui_next_page();
+      break;
     }
   }
 

@@ -80,15 +80,6 @@
     return `piste-on-piste-save-${slot}`;
   }
 
-  function undo_stack_push(s: State, autosave: boolean = true): State {
-    $game.undo_stack.splice(++$game.undo_index, $game.undo_stack.length, s);
-
-    if (autosave)
-      game.save();
-
-    return s;
-  }
-
   type SaveGameId = {
     slot: number;
     timestamp: number;
@@ -190,10 +181,7 @@
     if (!ui_can_new_game)
       return;
 
-    $game.state = new State(ui_names);
-
-    // Don't autosave before first shot
-    undo_stack_push($game.state, false);
+    game.new_game(ui_names);
 
     save_names(ui_names);
 
@@ -207,76 +195,32 @@
   }
 
   // ui actions, each need to handle undo
-  function ui_pot_ball(value: number): void {
-    let s: State = $game.state.deepcopy();
-    s.pot_ball(value);
-    $game.state = undo_stack_push(s);
-  }
-
-  function ui_plus_balls(): void {
-    let s: State = $game.state.deepcopy();
-    s.plus_balls();
-    $game.state = undo_stack_push(s);
-  }
-
-  function ui_minus_balls(): void {
-    let s: State = $game.state.deepcopy();
-    s.minus_balls();
-    $game.state = undo_stack_push(s);
-  }
-
-  function ui_commit_foul(value: number): void {
-    let s: State = $game.state.deepcopy();
-    s.commit_foul(value);
-    $game.state = undo_stack_push(s);
-  }
-
   function ui_click_player(player: Player): void {
-    let s: State = $game.state.deepcopy();
-
     // FIXME: don't duplicate the conditions here and in html
     if ($game.state.is_current_player(player.pid) && $game.state.can_end_turn())
-      s.end_turn();
+      game.end_turn();
     else if ($game.state.can_foul_retake() && $game.state.is_previous_player(player.pid))
-      s.foul_retake();
-    else
-      return;
-
-    $game.state = undo_stack_push(s);
+      game.foul_retake();
   }
 
   function ui_click_player_more(player: Player): void {
-    let s: State = $game.state.deepcopy();
-
     // FIXME: don't duplicate the conditions here and in html
     if ($game.state.can_concede(player.pid))
-      s.concede(player.pid);
+      game.concede(player.pid);
     else if ($game.state.can_declare_winner(player.pid))
-      s.declare_winner(player.pid);
-    else
-      return;
-
-    $game.state = undo_stack_push(s);
+      game.declare_winner(player.pid);
   }
 
   function ui_player_edit_points(pid: number, amount: number): void {
-    let s: State = $game.state.deepcopy();
-
     if ($game.state.can_player_edit_points(pid, amount))
-      s.player_edit_points(pid, amount);
-    else
-      return;
-
-    $game.state = undo_stack_push(s);
+      game.edit_points(pid, amount);
   }
 
   function ui_new_frame(): void {
     if (!$game.state.can_new_frame())
       return;
 
-    let s: State = $game.state.deepcopy();
-    s.new_frame();
-    $game.state = undo_stack_push(s);
+    game.new_frame();
 
     ui_page = UiPage.PLAY;
   }
@@ -324,22 +268,18 @@
   }
 
   function ui_key_end_turn(): void {
-    let s: State = $game.state.deepcopy();
-
     if ($game.state.can_end_turn())
-      s.end_turn();
-
-    $game.state = undo_stack_push(s)
+      game.end_turn();
   }
 
   function ui_key_pot_ball(value: number): void {
     if ($game.state.can_pot_ball(value))
-      ui_pot_ball(value);
+      game.pot_ball(value);
   }
 
   function ui_key_commit_foul(value: number): void {
     if ($game.state.can_commit_foul(value))
-      ui_commit_foul(value);
+      game.commit_foul(value);
   }
 
   function ui_key_undo(): void {
@@ -354,12 +294,12 @@
 
   function ui_key_plus_balls(): void {
     if ($game.state.can_plus_balls())
-      ui_plus_balls();
+      game.plus_balls();
   }
 
   function ui_key_minus_balls(): void {
     if ($game.state.can_minus_balls())
-      ui_minus_balls();
+      game.minus_balls();
   }
 
   function ui_key_down(event: KeyboardEvent) {
@@ -500,7 +440,7 @@
 	{#each [1,2,3,4,5,6,7] as value}
 	  <Ball value={value}
 		active={$game.state.can_pot_ball(value)}
-		action={() => ui_pot_ball(value)}>
+		action={() => game.pot_ball(value)}>
 	    {value}
 	    {#if value === 7 && $game.state.respot_black }
 	      <div class='respot'>re-spot!</div>
@@ -526,7 +466,7 @@
 	{#each [4,5,6,7] as value}
 	  <Ball value={0}
 		active={$game.state.can_commit_foul(value)}
-		action={() => ui_commit_foul(value)}>
+		action={() => game.commit_foul(value)}>
 	    {value}
 	  </Ball>
 	{/each}
@@ -629,12 +569,12 @@
 	<div class='label'>Fix</div>
 	<Ball value={0}
 	      active={$game.state.can_minus_balls()}
-	      action={() => ui_minus_balls()}>
+	      action={() => game.minus_balls()}>
 	  -
 	</Ball>
 	<Ball value={0}
 	      active={$game.state.can_plus_balls()}
-	      action={() => ui_plus_balls()}>
+	      action={() => game.plus_balls()}>
 	  +
 	</Ball>
 	<div class='label'></div>

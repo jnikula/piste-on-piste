@@ -8,7 +8,6 @@ class Game {
   undo_stack: State[] = [];
   undo_index: number = -1;
   save_game_slot: number = 0;
-  state: State;
 
   constructor() {
   }
@@ -36,8 +35,10 @@ class Game {
       this.undo_stack.push(new State(null, s));
 
     this.undo_index = this.undo_stack.length - 1;
+  }
 
-    this.state = this.undo_stack[this.undo_index];
+  get state(): State {
+    return this.undo_stack[this.undo_index];
   }
 
   get can_undo(): boolean {
@@ -47,7 +48,7 @@ class Game {
   _undo(): void {
     console.assert(this.can_undo);
 
-    this.state = this.undo_stack[--this.undo_index];
+    this.undo_index--;
   }
 
   get can_redo(): boolean {
@@ -57,13 +58,13 @@ class Game {
   _redo(): void {
     console.assert(this.can_redo);
 
-    this.state = this.undo_stack[++this.undo_index];
+    this.undo_index++;
   }
 
-  _push(): void {
-    let s: State = this.state.deepcopy();
+  _push(s: State = null): void {
+    if (s === null)
+      s = this.state.deepcopy();
     this.undo_stack.splice(++this.undo_index, this.undo_stack.length, s);
-    this.state = s;
   }
 
   _pot_ball(value: number): void {
@@ -128,10 +129,7 @@ class Game {
 
   // FIXME: use real type
   _new_game(names: any[]): void {
-    let s: State = new State(names);
-    this.undo_stack.splice(++this.undo_index, this.undo_stack.length, s);
-    this.state = s;
-
+    this._push(new State(names));
     // Note: Don't autosave before first shot
   }
 };

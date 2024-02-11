@@ -21,6 +21,25 @@ class Game {
     localStorage.setItem(this.save_game_name(), JSON.stringify(this.undo_stack));
   }
 
+  // FIXME: handle failure to load properly
+  _load(slot: number): void {
+    // save this in the same slot
+    this.save_game_slot = slot;
+
+    let json: string = localStorage.getItem(this.save_game_name());
+    if (!json)
+      return;
+
+    let source = JSON.parse(json);
+
+    for (let s of source)
+      this.undo_stack.push(new State(null, s));
+
+    this.undo_index = this.undo_stack.length - 1;
+
+    this.state = this.undo_stack[this.undo_index];
+  }
+
   get can_undo(): boolean {
     return this.undo_index > 0;
   }
@@ -126,6 +145,7 @@ function create_game(_game: Game) {
     subscribe,
     undo: () => update((val) => { val._undo(); return val; }),
     redo: () => update((val) => { val._redo(); return val; }),
+    load: (slot: number) => update((val) => { val._load(slot); return val; }),
     save: () => update((val) => { val._save(); return val; }),
     pot_ball: (value: number) => update((val) => { val._pot_ball(value); return val; }),
     plus_balls: () => update((val) => { val._plus_balls(); return val; }),

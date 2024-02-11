@@ -7,7 +7,6 @@
   import Ball from './lib/Ball.svelte';
   import Break from './lib/Break.svelte';
   import { game } from './lib/Game';
-  import State from './lib/State';
   import type Player from './lib/Player';
 
   function ui_toggle_fullscreen() {
@@ -111,24 +110,6 @@
 
   let saved_games: SaveGameId[] = read_saved_games();
 
-  function load_game(slot: number): State {
-    let json: string = localStorage.getItem(save_game_name(slot));
-    if (!json)
-      return null;
-
-    let source = JSON.parse(json);
-
-    for (let s of source)
-      $game.undo_stack.push(new State(null, s));
-
-    $game.undo_index = $game.undo_stack.length - 1;
-
-    // save this in the same slot
-    $game.save_game_slot = slot;
-
-    return $game.undo_stack[$game.undo_index];
-  }
-
   // Hack to "live update" generic stuff once per second
   let __counter = 0;
   setInterval(() => __counter++, 1000)
@@ -154,12 +135,11 @@
     ui_names = shuffle(ui_names);
   }
 
-  function ui_load_game(slot: number): void {
-    $game.state = load_game(slot);
-    if (!$game.state) {
-      console.log(`slot ${slot} not found`);
+  function ui_load_game(save_game: SaveGameId): void {
+    if (!save_game.timestamp)
       return;
-    }
+
+    game.load(save_game.slot);
 
     save_names(ui_names);
 
@@ -378,7 +358,7 @@
 	{/if}
       </div>
       {#each saved_games as save_game, index (save_game.slot) }
-	<div class='info-card' on:click={() => ui_load_game(save_game.slot)}>
+	<div class='info-card' on:click={() => ui_load_game(save_game)}>
 	  <div>Game save {index}</div>
 	  <div></div>
 	  {#if save_game.timestamp }

@@ -267,6 +267,7 @@
 	<div></div>
 	<div></div>
 	<div></div>
+	<div></div>
 	<div class='card-button'>Shuffle</div>
       </div>
       {#each $names.names as player_name (player_name.id)}
@@ -320,6 +321,7 @@
 	  <div>(Remaining {$game.state.num_points()})</div>
 	</div>
 	<div>Break</div>
+	<div></div>
 	<div class='card-button'>&bull;&bull;&bull;</div>
       </div>
       {#each $game.state.get_players() as player (player.pid)}
@@ -329,8 +331,10 @@
 	  <div class='score-card-points'>{player.points}</div>
 	  {#if $game.state.is_current_player(player.pid)}
 	    <div>{player.cur_break}</div>
+	    <div class='score-card-break'><Break balls={player._cur_break}></Break></div>
 	  {:else}
 	    <div>({player.last_break})</div>
+	    <div class='score-card-break unavailable'><Break balls={player._last_break}></Break></div>
 	  {/if}
 	  {#if $game.state.is_current_player(player.pid) && $game.state.can_end_turn() }
 	    <div class='card-button'>End Turn</div>
@@ -388,6 +392,7 @@
 	  <div>(Remaining {$game.state.num_points()})</div>
 	</div>
 	<div>Break</div>
+	<div></div>
 	<div class='card-button'>Edit</div>
       </div>
       {#each $game.state.get_players() as player (player.pid)}
@@ -396,9 +401,11 @@
 	  <div>{player.frame_1st} - {player.frame_2nd} - {player.frame_3rd}</div>
 	  <div class='score-card-points'>{player.points}</div>
 	  {#if $game.state.is_current_player(player.pid)}
+	    <div>{player.cur_break}</div>
 	    <div class='score-card-break'><Break balls={player._cur_break}></Break></div>
 	  {:else}
-	    <div class='score-card-break'><Break balls={player._last_break}></Break></div>
+	    <div>({player.last_break})</div>
+	    <div class='score-card-break unavailable'><Break balls={player._last_break}></Break></div>
 	  {/if}
 	  {#if $game.state.can_concede(player.pid) }
 	    <div class='card-button'>Concede</div>
@@ -444,6 +451,7 @@
 	  <div>(Remaining {$game.state.num_points()})</div>
 	</div>
 	<div>Break</div>
+	<div></div>
 	<div class='card-button'>Continue</div>
       </div>
       {#each $game.state.get_players() as player (player.pid)}
@@ -453,8 +461,10 @@
 	  <div class='score-card-points'>{player.points}</div>
 	  {#if $game.state.is_current_player(player.pid)}
 	    <div>{player.cur_break}</div>
+	    <div class='score-card-break'><Break balls={player._cur_break}></Break></div>
 	  {:else}
 	    <div>({player.last_break})</div>
+	    <div class='score-card-break unavailable'><Break balls={player._last_break}></Break></div>
 	  {/if}
 	  <div class='double-button'>
 	    <div class='card-button' on:click={() => ui_player_edit_points(player.pid, -1)}>-</div>
@@ -526,7 +536,7 @@
   .name-input-card {
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: 2fr 1fr 1fr 1fr 1fr 1fr;
+    grid-template-rows: 2fr 1fr 1fr 1fr 1fr 1fr 1fr;
   }
 
   .name-input {
@@ -543,7 +553,7 @@
   .score-card {
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: 1fr 1fr 3fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 3fr 1fr 1fr 1fr;
   }
 
   .double-button {

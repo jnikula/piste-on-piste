@@ -2,7 +2,7 @@
 <!-- Copyright (c) 2022 Jani Nikula <jani@nikula.org> -->
 <script lang='ts'>
   import { flip } from 'svelte/animate';
-  import * as fullscreen from './lib/fullscreen';
+  import { Fullscreen } from './lib/Fullscreen';
   import * as timeutil from './lib/time-util';
   import Ball from './lib/Ball.svelte';
   import Break from './lib/Break.svelte';
@@ -11,11 +11,13 @@
   import type Player from './lib/Player';
   import type { SaveGameId } from './lib/Game';
 
+  let fullscreen: Fullscreen = new Fullscreen(document.documentElement);
+
   function ui_toggle_fullscreen() {
     if (fullscreen.is_fullscreen())
       fullscreen.exit_fullscreen();
     else
-      fullscreen.request_fullscreen(document.documentElement);
+      fullscreen.request_fullscreen();
   }
 
   // Hack to "live update" generic stuff once per second

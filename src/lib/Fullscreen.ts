@@ -23,13 +23,20 @@ export class Fullscreen {
     this._elem = elem;
   }
 
-  is_fullscreen() {
-    return document.fullscreenElement ||
-      document.webkitFullscreenElement ||
-      document.msFullscreenElement;
+  _enabled(): boolean {
+    if (document.fullscreenElement)
+      return true;
+
+    if (document.webkitFullscreenElement)
+      return true;
+
+    if (document.msFullscreenElement)
+      return true;
+
+    return false;
   }
 
-  request_fullscreen() {
+  _enable(): void {
     if (this._elem.requestFullscreen) {
       this._elem.requestFullscreen();
     } else if (this._elem.webkitRequestFullscreen) {
@@ -39,7 +46,7 @@ export class Fullscreen {
     }
   }
 
-  exit_fullscreen() {
+  _disable(): void {
     if (document.exitFullscreen) {
       document.exitFullscreen();
     } else if (document.webkitExitFullscreen) {
@@ -47,6 +54,19 @@ export class Fullscreen {
     } else if (document.msExitFullscreen) {
       document.msExitFullscreen();
     }
+  }
+
+  _set(enable: boolean): void {
+    if (enable)
+      this._enable();
+    else
+      this._disable();
+  }
+
+  toggle(): void {
+    const enable: boolean = !this._enabled();
+
+    this._set(enable);
   }
 }
 

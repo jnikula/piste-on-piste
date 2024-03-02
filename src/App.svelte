@@ -14,10 +14,7 @@
   let fullscreen: Fullscreen = new Fullscreen(document.documentElement);
 
   function ui_toggle_fullscreen() {
-    if (fullscreen.is_fullscreen())
-      fullscreen.exit_fullscreen();
-    else
-      fullscreen.request_fullscreen();
+    fullscreen.toggle();
   }
 
   // Hack to "live update" generic stuff once per second

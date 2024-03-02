@@ -4,16 +4,51 @@
 import { writable } from 'svelte/store';
 import State from './State';
 
+export type SaveGameId = {
+  slot: number;
+  timestamp: number;
+};
+
 class Game {
   undo_stack: State[] = [];
   undo_index: number = -1;
-  save_game_slot: number = 0;
+  _save_game_slot: number = 0;
+  saved_games: SaveGameId[];
+
+  static _save_game_name_slot(slot: number): string {
+    return `piste-on-piste-save-${slot}`;
+  }
 
   constructor() {
+    this._read_saved_games();
+  }
+
+  _read_saved_games(): void {
+    let saved: SaveGameId[] = [];
+
+    for (let slot of [0,1,2]) {
+      let timestamp: number = 0;
+      let json: string = localStorage.getItem(Game._save_game_name_slot(slot));
+
+      if (json) {
+	let source = JSON.parse(json);
+	timestamp = source[0].timestamp; // first frame start time
+      }
+
+      saved.push({ slot: slot, timestamp: timestamp });
+    }
+
+    // newest to oldest, with unused (timestamp 0) being oldest
+    saved.sort((s1: SaveGameId, s2: SaveGameId) => s2.timestamp - s1.timestamp);
+
+    // save new game in the oldest slot
+    this._save_game_slot = saved[saved.length - 1].slot;
+
+    this.saved_games = saved;
   }
 
   save_game_name(): string {
-    return `piste-on-piste-save-${this.save_game_slot}`;
+    return Game._save_game_name_slot(this._save_game_slot);
   }
 
   _save(): void {
@@ -23,7 +58,7 @@ class Game {
   // FIXME: handle failure to load properly
   _load(slot: number): void {
     // save this in the same slot
-    this.save_game_slot = slot;
+    this._save_game_slot = slot;
 
     let json: string = localStorage.getItem(this.save_game_name());
     if (!json)

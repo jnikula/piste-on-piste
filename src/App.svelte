@@ -9,6 +9,7 @@
   import { game } from './lib/Game';
   import { names } from './lib/Names';
   import type Player from './lib/Player';
+  import type { SaveGameId } from './lib/Game';
 
   function ui_toggle_fullscreen() {
     if (fullscreen.is_fullscreen())
@@ -16,41 +17,6 @@
     else
       fullscreen.request_fullscreen(document.documentElement);
   }
-
-  function save_game_name(slot: number): string {
-    return `piste-on-piste-save-${slot}`;
-  }
-
-  type SaveGameId = {
-    slot: number;
-    timestamp: number;
-  };
-
-  function read_saved_games(): SaveGameId[] {
-    let saved: SaveGameId[] = [];
-
-    for (let slot of [0,1,2]) {
-      let timestamp: number = 0;
-      let json: string = localStorage.getItem(save_game_name(slot));
-
-      if (json) {
-	let source = JSON.parse(json);
-	timestamp = source[0].timestamp; // first frame start time
-      }
-
-      saved.push({ slot: slot, timestamp: timestamp });
-    }
-
-    // newest to oldest, with unused (timestamp 0) being oldest
-    saved.sort((s1: SaveGameId, s2: SaveGameId) => s2.timestamp - s1.timestamp);
-
-    // save new game in the oldest slot
-    $game.save_game_slot = saved[saved.length - 1].slot;
-
-    return saved;
-  }
-
-  let saved_games: SaveGameId[] = read_saved_games();
 
   // Hack to "live update" generic stuff once per second
   let __counter = 0;
@@ -289,7 +255,7 @@
 	  <div></div>
 	{/if}
       </div>
-      {#each saved_games as save_game, index (save_game.slot) }
+      {#each $game.saved_games as save_game, index (save_game.slot) }
 	<div class='info-card' on:click={() => ui_load_game(save_game)}>
 	  <div>Game save {index}</div>
 	  <div></div>

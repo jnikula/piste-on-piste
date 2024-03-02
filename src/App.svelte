@@ -42,6 +42,9 @@
     if (!save_game.timestamp)
       return;
 
+    // Note: Fullscreen can only be entered via user interaction
+    fullscreen.load();
+
     game.load(save_game.slot);
 
     names.save();
@@ -56,6 +59,9 @@
   function ui_new_game(): void {
     if (!ui_can_new_game())
       return;
+
+    // Note: Fullscreen can only be entered via user interaction
+    fullscreen.load();
 
     game.new_game($names.names);
 

@@ -63,10 +63,27 @@ export class Fullscreen {
       this._disable();
   }
 
+  _save(enable: boolean): void {
+    localStorage.setItem('piste-on-piste-fullscreen', JSON.stringify(enable));
+  }
+
+  load(): void {
+    const fullscreen_json = localStorage.getItem('piste-on-piste-fullscreen');
+    if (!fullscreen_json)
+      return
+
+    try {
+      const enable: boolean = JSON.parse(fullscreen_json);
+      this._set(enable);
+    } catch (e) {
+    }
+  }
+
   toggle(): void {
     const enable: boolean = !this._enabled();
 
     this._set(enable);
+    this._save(enable);
   }
 }
 

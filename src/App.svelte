@@ -163,8 +163,18 @@
 
     console.log(`key "${event.key}"`);
 
-    if (ui_page == UiPage.START)
+    if (ui_page == UiPage.START) {
+      // FIXME: add shortcuts to loading games
+      switch (event.key) {
+      case 's':
+	names.shuffle();
+	break;
+      case 'n':
+	ui_new_game();
+	break;
+      }
       return;
+    }
 
     switch (event.key) {
     case '1':

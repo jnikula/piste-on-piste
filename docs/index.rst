@@ -28,7 +28,7 @@ app, please see the `Piste on Piste GitHub project page`_.
 
 .. _Piste on Piste GitHub project page: https://github.com/jnikula/piste-on-piste
 
-.. _Piste on Piste scoreboard app: stable
+.. _Piste on Piste scoreboard app: latest.html
 
 .. toctree::
    :maxdepth: 1

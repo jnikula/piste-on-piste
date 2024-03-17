@@ -128,6 +128,8 @@
   }
 
   function ui_name_input_card_style(sn: SavedName): string {
+    if (!sn.enabled)
+      return 'unavailable';
     return $names.valid_name(sn) ? '' : 'retake'; // FIXME
   }
 
@@ -238,8 +240,18 @@
 	<div class='card-button'>Shuffle</div>
       </div>
       {#each $names.names as player_name (player_name.id)}
-	<div class='name-input-card {ui_name_input_card_style(player_name)}' animate:flip='{{ duration: (d) => d * 2 }}'>
-	  <input class='name-input' size=9 minlength=1 maxlength=10 placeholder='enter name' bind:value='{player_name.name}'/>
+	<div class='name-input-card {ui_name_input_card_style(player_name)}' animate:flip='{{ duration: (d) => d * 2 }}' on:click={() => names.toggle(player_name.id)}>
+	  <input class='name-input' size=10 minlength=1 maxlength=10 placeholder='enter name' bind:value='{player_name.name}' on:click|stopPropagation={() => {}}/>
+	  <div></div>
+	  <div></div>
+	  <div></div>
+	  <div></div>
+	  <div></div>
+	  {#if player_name.enabled }
+	    <div class='card-button'>Leave</div>
+	  {:else}
+	    <div class='card-button'>Join</div>
+	  {/if}
 	</div>
       {/each}
 

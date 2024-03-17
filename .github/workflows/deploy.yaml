@@ -3,6 +3,19 @@ on:
     branches:
       - main
 jobs:
+  configure:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.version-matrix.outputs.matrix }}
+      latest: ${{ steps.latest.outputs.latest }}
+    steps:
+      - uses: actions/checkout@v3
+      - run: git fetch --tags origin
+      - id: version-matrix
+        run: echo "matrix=$(.github/config.py)" | tee $GITHUB_OUTPUT
+      - id: latest
+        run: echo "latest=$(.github/config.py --latest)" | tee $GITHUB_OUTPUT
+
   build-docs:
     runs-on: ubuntu-latest
     steps:
@@ -18,13 +31,9 @@ jobs:
 
   build-app:
     runs-on: ubuntu-latest
+    needs: configure
     strategy:
-      matrix:
-        include:
-          - ref: main
-            name: app-testing
-          - ref: v0.1.0
-            name: app-stable
+      matrix: ${{ fromJson(needs.configure.outputs.matrix) }}
     steps:
       - uses: actions/checkout@v3
         with:
@@ -42,7 +51,7 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest
-    needs: [build-docs, build-app]
+    needs: [configure, build-docs, build-app]
     permissions:
       pages: write
       id-token: write
@@ -51,17 +60,14 @@ jobs:
       url: ${{steps.deployment.outputs.page_url}}
     steps:
       - uses: actions/download-artifact@v4
-        with:
-          name: app-testing
-          path: testing
-      - uses: actions/download-artifact@v4
-        with:
-          name: app-stable
-          path: stable
-      - uses: actions/download-artifact@v4
-        with:
-          name: docs-artifact
-          path: .
+      - run: find
+      - run: mv docs-artifact/* .
+      - run: |
+          latest=${{ needs.configure.outputs.latest }}
+          echo "<meta http-equiv=\"refresh\" content=\"0; url=$latest\" />" > latest.html
+      - run: |
+          mkdir stable
+          echo "<meta http-equiv=\"refresh\" content=\"0; url=../v0.1.0\" />" > stable/index.html
       - run: find
       - uses: actions/configure-pages@v1
       - uses: actions/upload-pages-artifact@v1

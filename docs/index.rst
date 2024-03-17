@@ -15,13 +15,11 @@ size screens in landscape.
 
 There's a rudimentary :ref:`manual` for the app, covering the basics.
 
-.. warning::
+.. note::
 
-   The app is still in early stages of development, could lose track of your
-   score, and may not accurately reflect the rules, especially in corner
-   cases.
-
-   Use at your own risk.
+   The saved games might not work across scoreboard app versions. If you start a
+   game using one version of the app, please finish it using the same
+   version. The app version is visible in the URL.
 
 If you have any issues, questions or comments about the rules or the scoreboard
 app, please see the `Piste on Piste GitHub project page`_.

@@ -19,7 +19,7 @@ app built from current main branch.
 
 .. _rules: https://jnikula.github.io/piste-on-piste/three-player-snooker-rules.html
 
-.. _scoreboard app: https://jnikula.github.io/piste-on-piste/stable
+.. _scoreboard app: https://jnikula.github.io/piste-on-piste/latest.html
 
 .. _development version: https://jnikula.github.io/piste-on-piste/testing
 

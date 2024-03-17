@@ -7,7 +7,7 @@
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 project = 'Piste on Piste'
-copyright = '2022, Jani Nikula'
+copyright = '2022-2024, Jani Nikula'
 author = 'Jani Nikula'
 
 # -- General configuration ---------------------------------------------------

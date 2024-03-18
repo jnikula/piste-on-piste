@@ -57,7 +57,7 @@
   }
 
   function ui_new_game(): void {
-    if (!ui_can_new_game())
+    if (!$names.can_new_game())
       return;
 
     // Note: Fullscreen can only be entered via user interaction
@@ -247,36 +247,30 @@
 	</div>
       {/each}
 
-      <div class='info-card' on:click={ui_new_game}>
+      <div class='info-card {$names.can_new_game() ? "" : "unavailable"}' on:click={ui_new_game}>
 	<div class='info-card-copyright' on:click|stopPropagation={() => false}><a href="https://jnikula.github.io/piste-on-piste/">&copy; 2022-2024 Jani Nikula<br>License: GPL 3.0 or later &#x1f517;</a></div>
 	<div></div>
 	<div>Piste</div>
 	<div>on</div>
 	<div>Piste</div>
 	<div></div>
-	{#if ui_can_new_game }
-	  <div class='card-button'>New game</div>
-	{:else}
-	  <div></div>
-	{/if}
+	<div class='card-button'>New game</div>
       </div>
       {#each $game.saved_games as save_game, index (save_game.slot) }
-	<div class='info-card' on:click={() => ui_load_game(save_game)}>
+	<div class='info-card {save_game.timestamp ? "" : "unavailable"}' on:click={() => ui_load_game(save_game)}>
 	  <div>Game save {index}</div>
 	  <div></div>
 	  {#if save_game.timestamp }
 	    <div>Started</div>
 	    <div>{timeutil.format_date(save_game.timestamp)}</div>
 	    <div>{timeutil.format_time(save_game.timestamp)}</div>
-	    <div></div>
-	    <div class='card-button'>Load game</div>
 	  {:else}
 	    <div></div>
 	    <div></div>
 	    <div></div>
-	    <div></div>
-	    <div></div>
 	  {/if}
+	  <div></div>
+	  <div class='card-button'>Load game</div>
 	</div>
       {/each}
 

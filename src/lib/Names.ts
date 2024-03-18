@@ -73,8 +73,12 @@ class Names {
     return dupes.length === 1;
   }
 
-  all_valid(): boolean {
+  _all_valid(): boolean {
     return this.names.filter((x) => !this.valid_name(x.name)).length === 0;
+  }
+
+  can_new_game(): boolean {
+    return this._all_valid();
   }
 }
 

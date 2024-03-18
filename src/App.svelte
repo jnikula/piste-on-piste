@@ -127,8 +127,8 @@
       return '';
   }
 
-  function ui_name_input_card_style(name: string): string {
-    return $names.valid_name(name) ? '' : 'retake'; // FIXME
+  function ui_name_input_card_style(sn: SavedName): string {
+    return $names.valid_name(sn) ? '' : 'retake'; // FIXME
   }
 
   // UI key events
@@ -238,7 +238,7 @@
 	<div class='card-button'>Shuffle</div>
       </div>
       {#each $names.names as player_name (player_name.id)}
-	<div class='name-input-card {ui_name_input_card_style(player_name.name)}' animate:flip='{{ duration: (d) => d * 2 }}'>
+	<div class='name-input-card {ui_name_input_card_style(player_name)}' animate:flip='{{ duration: (d) => d * 2 }}'>
 	  <input class='name-input' size=9 minlength=1 maxlength=10 placeholder='enter name' bind:value='{player_name.name}'/>
 	</div>
       {/each}

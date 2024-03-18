@@ -64,17 +64,17 @@ class Names {
     localStorage.setItem('piste-on-piste-names', JSON.stringify(this.names));
   }
 
-  valid_name(name: string): boolean {
-    if (!name)
+  valid_name(sn: SavedName): boolean {
+    if (!sn.name)
       return false;
 
-    let dupes = this.names.filter((x) => x.name.toUpperCase() === name.toUpperCase());
+    let dupes = this.names.filter((x) => x.name.toUpperCase() === sn.name.toUpperCase());
 
     return dupes.length === 1;
   }
 
   _all_valid(): boolean {
-    return this.names.filter((x) => !this.valid_name(x.name)).length === 0;
+    return this.names.filter((x) => !this.valid_name(x)).length === 0;
   }
 
   can_new_game(): boolean {

@@ -52,10 +52,6 @@
     ui_page = UiPage.PLAY;
   }
 
-  function ui_can_new_game(): boolean {
-    return $names.all_valid();
-  }
-
   function ui_new_game(): void {
     if (!$names.can_new_game())
       return;

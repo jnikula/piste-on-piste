@@ -9,8 +9,9 @@ jobs:
       matrix: ${{ steps.version-matrix.outputs.matrix }}
       latest: ${{ steps.latest.outputs.latest }}
     steps:
-      - uses: actions/checkout@v3
-      - run: git fetch --tags origin
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - id: version-matrix
         run: echo "matrix=$(.github/config.py)" | tee $GITHUB_OUTPUT
       - id: latest
@@ -19,7 +20,7 @@ jobs:
   build-docs:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: actions/setup-python@v4
       - run: pip install sphinx
       - run: sphinx-build docs _build
@@ -35,7 +36,7 @@ jobs:
     strategy:
       matrix: ${{ fromJson(needs.configure.outputs.matrix) }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           ref: ${{ matrix.ref }}
       - uses: actions/setup-node@v3

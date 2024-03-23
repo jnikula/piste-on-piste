@@ -52,6 +52,9 @@ class State {
     for (let pid of [0,1,2]) {
       let name: string;
 
+      if (names && pid < names.length && !names[pid].enabled)
+	continue;
+
       if (names && pid < names.length && names[pid].name && names[pid].name.length > 0)
 	name = names[pid].name;
       else
@@ -191,7 +194,8 @@ class State {
     // players still in the game
     const players: Player[] = this.players.filter((p) => !p.loser && !p.winner).sort((p1, p2) => p1.compare(p2));
 
-    // can declare winner only if everyone still in the game
+    // can declare winner only if three-player game and everyone still in the
+    // game
     if (players.length != 3)
       return false;
 
@@ -236,6 +240,10 @@ class State {
     return Math.abs(p1.points - p2.points) > this.num_points();
   }
 
+  get num_players(): number {
+    return this.players.length;
+  }
+
   _num_players_left(): number {
     return this.players.filter((p) => !p.loser && !p.winner).length;
   }
@@ -260,7 +268,7 @@ class State {
     // players still in the game
     const players = this.players.filter((p) => !p.loser && !p.winner).sort((p1, p2) => p1.compare(p2));
 
-    // win/lose conditions
+    // win/lose conditions.
     if (players.length == 3) {
       if (this._out_of_reach(players[0], players[1]))
 	players[0].loser = true;
@@ -268,15 +276,26 @@ class State {
 	players[2].winner = true;
     } else if (players.length == 2) {
       if (this._out_of_reach(players[0], players[1])) {
-	if (this._have_winner())
+	if (this.num_players == 3) {
+	  // Three-player game
+	  if (this._have_winner())
+	    players[0].loser = true;
+	  else
+	    players[1].winner = true;
+	} else {
+	  // Two-player game
 	  players[0].loser = true;
-	else
 	  players[1].winner = true;
+	}
       }
     }
   }
 
   _sorted_players(): Player[] {
+    // HACK: don't sort when only two players
+    if (this.players.length == 2)
+      return [...this.players];
+
     return [...this.players].sort((p1, p2) => p1.compare(p2));
   }
 
@@ -355,7 +374,7 @@ class State {
 
       while (true) {
 	this.cur_pos++;
-	if (this.cur_pos >= 3)
+	if (this.cur_pos >= this.num_players)
 	  this.cur_pos = 0;
 	player = this._get_player_by_pos(this.cur_pos);
 	if (player.winner || player.loser)
@@ -492,12 +511,12 @@ class State {
     this.num_frames++;
 
     for (let p of this.players) {
-      if (p.pos == 0)
-	p.frame_3rd++;
-      else if (p.pos == 1)
-	p.frame_2nd++;
-      else
+      if (p.winner)
 	p.frame_1st++;
+      else if (p.loser)
+	p.frame_3rd++;
+      else
+	p.frame_2nd++;
     }
   }
 

@@ -318,6 +318,10 @@
 	  {/if}
 	</div>
       {/each}
+      {#if $game.state.num_players == 2}
+	<div class='score-card blank'></div>
+      {/if}
+
       <div class='button-bar'>
 	<div class='label'>Pot</div>
 	{#each [1,2,3,4,5,6,7] as value}
@@ -389,6 +393,9 @@
 	  {/if}
 	</div>
       {/each}
+      {#if $game.state.num_players == 2}
+	<div class='score-card blank'></div>
+      {/if}
 
       <div class='info-card' on:click={ui_new_frame}>
 	<div>Frame shot time</div>
@@ -413,6 +420,10 @@
 	<div>{ player.game_high_break }</div>
       </div>
       {/each}
+      {#if $game.state.num_players == 2}
+	<div class='score-card blank'></div>
+      {/if}
+
     </div>
   {:else}
     <div class='grid-container'>
@@ -445,6 +456,10 @@
 	  </div>
 	</div>
       {/each}
+      {#if $game.state.num_players == 2}
+	<div class='score-card blank'></div>
+      {/if}
+
       <div class='button-bar'>
 	<div class='label'>Count</div>
 	{#each [1,2,3,4,5,6,7] as value}
@@ -599,6 +614,11 @@
   .unavailable {
     filter: brightness(50%);
     -webkit-filter: brightness(50%); /* https://caniuse.com/css-filters */
+  }
+
+  .blank {
+    filter: brightness(0%);
+    -webkit-filter: brightness(0%); /* https://caniuse.com/css-filters */
   }
 
   .first-place {

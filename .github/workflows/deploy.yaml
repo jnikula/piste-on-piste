@@ -13,7 +13,7 @@ jobs:
         with:
           fetch-depth: 0
       - id: version-matrix
-        run: echo "matrix=$(.github/config.py)" | tee $GITHUB_OUTPUT
+        run: echo "matrix=$(.github/config.py --tags --branches)" | tee $GITHUB_OUTPUT
       - id: latest
         run: echo "latest=$(.github/config.py --latest)" | tee $GITHUB_OUTPUT
 
@@ -69,6 +69,9 @@ jobs:
       - run: |
           mkdir stable
           echo "<meta http-equiv=\"refresh\" content=\"0; url=../v0.1.0\" />" > stable/index.html
+      - run: |
+          mkdir testing
+          echo "<meta http-equiv=\"refresh\" content=\"0; url=../main\" />" > testing/index.html
       - run: find
       - uses: actions/configure-pages@v1
       - uses: actions/upload-pages-artifact@v1

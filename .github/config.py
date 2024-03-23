@@ -4,28 +4,43 @@ import argparse
 import json
 import subprocess
 
+def git(cmd):
+    return subprocess.run(cmd, text=True, stdout=subprocess.PIPE).stdout.strip().splitlines()
+
 def git_tags():
     cmd = ['git', 'tag', '--list', '--sort=version:refname']
 
-    return subprocess.run(cmd, text=True, stdout=subprocess.PIPE).stdout.strip().splitlines()
+    return git(cmd)
 
+def git_branches():
+    cmd = ['git', 'branch', '--list', '--format=%(refname:short)']
+
+    return git(cmd)
 
 def main():
     parser = argparse.ArgumentParser()
+    parser.add_argument('--tags', action='store_true')
+    parser.add_argument('--branches', action='store_true')
     parser.add_argument('--latest', action='store_true')
     args = parser.parse_args()
 
-    tags = git_tags()
-
     if args.latest:
-        print(tags[-1])
+        print(git_tags()[-1])
         return
 
-    tags = [ { 'ref': tag, 'name': tag } for tag in tags ]
-    tags += [ { 'ref': 'main', 'name': 'testing' } ]
+    refs = []
+
+    if args.tags:
+        refs += git_tags()
+
+    if args.branches:
+        refs += git_branches()
+        refs = [ ref for ref in refs if '/' not in ref ]
+
+    refs = [ { 'ref': ref, 'name': ref } for ref in refs ]
 
     matrix = {
-        'include': tags,
+        'include': refs,
     }
 
     print(json.dumps(matrix))

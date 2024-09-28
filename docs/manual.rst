@@ -34,10 +34,10 @@ License
 ~~~~~~~
 
 The scoreboard app is free software, released under the `GNU General Public
-License v3.0 or later`_ (GPL-3.0-or-later).
+License v3.0 or later`_ (AGPL-3.0-or-later).
 
 .. _GNU General Public License v3.0 or later:
-  https://spdx.org/licenses/GPL-3.0-or-later.html
+  https://spdx.org/licenses/AGPL-3.0-or-later.html
 
 Privacy
 ~~~~~~~

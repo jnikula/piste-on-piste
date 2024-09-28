@@ -1,4 +1,4 @@
-<!-- SPDX-License-Identifier: GPL-3.0-or-later -->
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later -->
 <!-- Copyright (c) 2022 Jani Nikula <jani@nikula.org> -->
 <script lang='ts'>
   import { flip } from 'svelte/animate';
@@ -244,7 +244,7 @@
       {/each}
 
       <div class='info-card {$names.can_new_game() ? "" : "unavailable"}' on:click={ui_new_game}>
-	<div class='info-card-copyright' on:click|stopPropagation={() => false}><a href="https://jnikula.github.io/piste-on-piste/">&copy; 2022-2024 Jani Nikula<br>License: GPL 3.0 or later &#x1f517;</a></div>
+	<div class='info-card-copyright' on:click|stopPropagation={() => false}><a href="https://jnikula.github.io/piste-on-piste/">&copy; 2022-2024 Jani Nikula<br>License: AGPL 3.0 or later &#x1f517;</a></div>
 	<div></div>
 	<div>Piste</div>
 	<div>on</div>

@@ -29,14 +29,14 @@ License
 The rules are free documentation, released under the `Creative Commons
 Attribution Share Alike 4.0 International`_ (CC-BY-SA-4.0).
 
-The scoreboard app is free software, released under the `GNU General Public
-License v3.0 or later`_ (GPL-3.0-or-later).
+The scoreboard app is free software, released under the `GNU Affero General
+Public License v3.0 or later`_ (AGPL-3.0-or-later).
 
 .. _Creative Commons Attribution Share Alike 4.0 International:
   https://spdx.org/licenses/CC-BY-SA-4.0.html
 
-.. _GNU General Public License v3.0 or later:
-  https://spdx.org/licenses/GPL-3.0-or-later.html
+.. _GNU Affero General Public License v3.0 or later:
+  https://spdx.org/licenses/AGPL-3.0-or-later.html
 
 Contact
 -------

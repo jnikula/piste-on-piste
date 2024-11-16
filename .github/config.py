@@ -25,7 +25,11 @@ def main():
     args = parser.parse_args()
 
     if args.latest:
-        print(git_tags()[-1])
+        tags = git_tags()
+        if tags:
+            print(tags[-1])
+        else:
+            print('main')
         return
 
     refs = []

@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
-// Copyright (c) 2022 Jani Nikula <jani@nikula.org>
+// SPDX-FileCopyrightText: 2022 Jani Nikula <jani@nikula.org>
 
 // Meh, augment types to avoid type errors
 declare global {

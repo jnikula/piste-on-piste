@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
-// Copyright (c) 2022 Jani Nikula <jani@nikula.org>
+// SPDX-FileCopyrightText: 2022 Jani Nikula <jani@nikula.org>
 
 function pad(num: number): string {
   return num.toString().padStart(2, '0');

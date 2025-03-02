@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 // SPDX-FileCopyrightText: 2022 Jani Nikula <jani@nikula.org>
 
-import * as timeutil from './time-util';
+import * as timeutil from './time-util.ts';
 
 class Player {
   // game

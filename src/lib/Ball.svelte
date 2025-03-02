@@ -2,7 +2,7 @@
 <!-- SPDX-FileCopyrightText: 2022 Jani Nikula <jani@nikula.org> -->
 <script lang='ts'>
   import type { Snippet } from 'svelte';
-  import { value_to_csscolor } from './ball-colors';
+  import { value_to_csscolor } from './ball-colors.ts';
 
   interface Props {
     value: number;

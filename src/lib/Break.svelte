@@ -3,7 +3,7 @@
 <script lang='ts'>
   import { run } from 'svelte/legacy';
 
-  import { value_to_csscolor } from './ball-colors';
+  import { value_to_csscolor } from './ball-colors.ts';
   interface Props {
     balls: number[];
   }

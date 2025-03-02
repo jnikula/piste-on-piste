@@ -4,14 +4,14 @@
   import { stopPropagation } from 'svelte/legacy';
 
   import { flip } from 'svelte/animate';
-  import { Fullscreen } from './lib/Fullscreen';
-  import * as timeutil from './lib/time-util';
+  import { Fullscreen } from './lib/Fullscreen.ts';
+  import * as timeutil from './lib/time-util.ts';
   import Ball from './lib/Ball.svelte';
   import Break from './lib/Break.svelte';
-  import { game } from './lib/Game';
-  import { names } from './lib/Names';
-  import type Player from './lib/Player';
-  import type { SaveGameId } from './lib/Game';
+  import { game } from './lib/Game.ts';
+  import { names } from './lib/Names.ts';
+  import type Player from './lib/Player.ts';
+  import type { SaveGameId } from './lib/Game.ts';
 
   let fullscreen: Fullscreen = new Fullscreen(document.documentElement);
 

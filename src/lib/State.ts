@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 // SPDX-FileCopyrightText: 2022 Jani Nikula <jani@nikula.org>
 
-import Player from './Player';
-import * as timeutil from './time-util';
+import Player from './Player.ts';
+import * as timeutil from './time-util.ts';
 
 const MAX_BALLS: number = 15 + 6;
 

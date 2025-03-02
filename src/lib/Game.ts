@@ -2,7 +2,7 @@
 // SPDX-FileCopyrightText: 2024 Jani Nikula <jani@nikula.org>
 
 import { writable } from 'svelte/store';
-import State from './State';
+import State from './State.ts';
 
 export type SaveGameId = {
   slot: number;

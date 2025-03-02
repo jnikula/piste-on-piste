@@ -1,35 +1,39 @@
 <!-- SPDX-License-Identifier: AGPL-3.0-or-later -->
 <!-- SPDX-FileCopyrightText: 2022 Jani Nikula <jani@nikula.org> -->
 <script lang='ts'>
-  import { run } from 'svelte/legacy';
-
   import { value_to_csscolor } from './ball-colors.ts';
+
   interface Props {
     balls: number[];
   }
 
-  let { balls }: Props = $props();
+  let {
+    balls,
+  }: Props = $props();
 
-  let counts: number[] = $state();
-  let err: number = $state();
-
-  let ball_counts = $derived(balls.length > 8);
-
-  run(() => {
-    counts = [0,0,0,0,0,0,0,0];
-    err = 0;
+  let ball_counts: number[] = $derived.by(() => {
+    const c: number[] = [0,0,0,0,0,0,0,0];
 
     for (let i of balls) {
       if (i > 0)
-	counts[i]++;
-      else
-	err = i;
+	c[i]++;
     }
+
+    return c;
   });
+
+  let foul: number = $derived.by(() => {
+    for (const i of balls)
+      if (i < 0)
+	return i;
+    return 0;
+  });
+
+  let show_ball_counts: boolean = $derived(balls.length > 8);
 </script>
 
-{#if ball_counts}
-  {#each counts as count, value}
+{#if show_ball_counts}
+  {#each ball_counts as count, value}
     {#if count > 0}
       <span class='ball value' style='--csscolor: {value_to_csscolor(value)};'>{count}</span>
     {/if}
@@ -41,8 +45,8 @@
     {/if}
   {/each}
 {/if}
-{#if err < 0}
-  <span class='ball value' style='--csscolor: {value_to_csscolor(err)};'>F</span>
+{#if foul}
+  <span class='ball value' style='--csscolor: {value_to_csscolor(foul)};'>F</span>
 {/if}
 
 <style>

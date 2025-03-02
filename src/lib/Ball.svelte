@@ -1,12 +1,22 @@
 <!-- SPDX-License-Identifier: AGPL-3.0-or-later -->
 <!-- Copyright (c) 2022 Jani Nikula <jani@nikula.org> -->
 <script lang='ts'>
-  export let value: number;
-  export let action = () => {};
-  export let active: boolean;
   import { value_to_csscolor } from './ball-colors';
+  interface Props {
+    value: number;
+    action?: any;
+    active: boolean;
+    children?: import('svelte').Snippet;
+  }
 
-  $: brightness = active ? '100%' : '50%'
+  let {
+    value,
+    action = () => {},
+    active,
+    children
+  }: Props = $props();
+
+  let brightness = $derived(active ? '100%' : '50%')
 
   function onclick(): void {
     if (active)
@@ -14,8 +24,8 @@
   }
 </script>
 
-<div class='ball' style='--csscolor: {value_to_csscolor(value)}; --brightness: {brightness};' on:click={onclick}>
-  <slot></slot>
+<div class='ball' style='--csscolor: {value_to_csscolor(value)}; --brightness: {brightness};' {onclick}>
+  {@render children?.()}
 </div>
 
 <style>

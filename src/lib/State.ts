@@ -45,7 +45,7 @@ class State {
       this.players[i] = new Player(0, 0, '', this.players[i]);
   }
 
-  constructor(names=null, source: Object = null) {
+  constructor(names: any[] = null, source: Object = null) {
     // frame
     this.timestamp = Date.now()
 

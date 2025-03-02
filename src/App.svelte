@@ -1,6 +1,8 @@
 <!-- SPDX-License-Identifier: AGPL-3.0-or-later -->
 <!-- Copyright (c) 2022 Jani Nikula <jani@nikula.org> -->
 <script lang='ts'>
+  import { stopPropagation } from 'svelte/legacy';
+
   import { flip } from 'svelte/animate';
   import { Fullscreen } from './lib/Fullscreen';
   import * as timeutil from './lib/time-util';
@@ -18,15 +20,15 @@
   }
 
   // Hack to "live update" generic stuff once per second
-  let __counter = 0;
+  let __counter = $state(0);
   setInterval(() => __counter++, 1000)
 
-  $: live_update = function(thing: string): string {
+  let live_update = $derived(function(thing: string): string {
     // Do something with __counter to react to changes
     let dummy = __counter;
     dummy = dummy
     return thing;
-  }
+  })
 
   // ui pages
   const UiPage = {
@@ -36,7 +38,7 @@
     EDIT: 3,
   };
 
-  let ui_page = UiPage.START;
+  let ui_page = $state(UiPage.START);
 
   function ui_load_game(save_game: SaveGameId): void {
     if (!save_game.timestamp)
@@ -222,13 +224,13 @@
 
 </script>
 
-<svelte:window on:keydown={ui_key_down} />
+<svelte:window onkeydown={ui_key_down} />
 
 <main>
-  {#if ui_page == UiPage.START }
+  {#if ui_page == UiPage.START}
 
     <div class='grid-container'>
-      <div class='name-input-card' on:click={names.shuffle}>
+      <div class='name-input-card' onclick={names.shuffle}>
 	<div>Enter names</div>
 	<div></div>
 	<div></div>
@@ -243,8 +245,8 @@
 	</div>
       {/each}
 
-      <div class='info-card {$names.can_new_game() ? "" : "unavailable"}' on:click={ui_new_game}>
-	<div class='info-card-copyright' on:click|stopPropagation={() => false}><a href="https://jnikula.github.io/piste-on-piste/">&copy; 2022-2024 Jani Nikula<br>License: AGPL 3.0 or later &#x1f517;</a></div>
+      <div class='info-card {$names.can_new_game() ? "" : "unavailable"}' onclick={ui_new_game}>
+	<div class='info-card-copyright' onclick={stopPropagation(() => false)}><a href="https://jnikula.github.io/piste-on-piste/">&copy; 2022-2024 Jani Nikula<br>License: AGPL 3.0 or later &#x1f517;</a></div>
 	<div></div>
 	<div>Piste</div>
 	<div>on</div>
@@ -253,10 +255,10 @@
 	<div class='card-button'>New game</div>
       </div>
       {#each $game.saved_games as save_game, index (save_game.slot) }
-	<div class='info-card {save_game.timestamp ? "" : "unavailable"}' on:click={() => ui_load_game(save_game)}>
+	<div class='info-card {save_game.timestamp ? "" : "unavailable"}' onclick={() => ui_load_game(save_game)}>
 	  <div>Game save {index}</div>
 	  <div></div>
-	  {#if save_game.timestamp }
+	  {#if save_game.timestamp}
 	    <div>Started</div>
 	    <div>{timeutil.format_date(save_game.timestamp)}</div>
 	    <div>{timeutil.format_time(save_game.timestamp)}</div>
@@ -272,9 +274,9 @@
 
     </div>
 
-  {:else if ui_page == UiPage.PLAY }
+  {:else if ui_page == UiPage.PLAY}
     <div class='grid-container'>
-      <div class='score-card' on:click={ui_next_page}>
+      <div class='score-card' onclick={ui_next_page}>
 	<div>{ live_update($game.state.get_frame_time()) }</div>
 	<div>Frames ({$game.state.num_frames})</div>
 	<div>
@@ -286,7 +288,7 @@
 	<div class='card-button'>&bull;&bull;&bull;</div>
       </div>
       {#each $game.state.get_players() as player (player.pid)}
-	<div class='score-card {ui_score_card_player_style(player)}' on:click={() => ui_click_player(player)} animate:flip='{{ duration: (d) => d * 2 }}'>
+	<div class='score-card {ui_score_card_player_style(player)}' onclick={() => ui_click_player(player)} animate:flip='{{ duration: (d) => d * 2 }}'>
 	  <div>{player.name}</div>
 	  <div>{player.frame_1st} - {player.frame_2nd} - {player.frame_3rd}</div>
 	  <div class='score-card-points'>{player.points}</div>
@@ -297,9 +299,9 @@
 	    <div>({player.last_break})</div>
 	    <div class='score-card-break unavailable'><Break balls={player._last_break}></Break></div>
 	  {/if}
-	  {#if $game.state.is_current_player(player.pid) && $game.state.can_end_turn() }
+	  {#if $game.state.is_current_player(player.pid) && $game.state.can_end_turn()}
 	    <div class='card-button'>End Turn</div>
-	  {:else if $game.state.can_foul_retake() && $game.state.is_previous_player(player.pid) }
+	  {:else if $game.state.can_foul_retake() && $game.state.is_previous_player(player.pid)}
 	    <div class='card-button'>Play Again</div>
 	  {:else}
 	    <div></div>
@@ -313,7 +315,7 @@
 		active={$game.state.can_pot_ball(value)}
 		action={() => game.pot_ball(value)}>
 	    {value}
-	    {#if value === 7 && $game.state.respot_black }
+	    {#if value === 7 && $game.state.respot_black}
 	      <div class='respot'>re-spot!</div>
 	    {/if}
 	  </Ball>
@@ -343,9 +345,9 @@
 	{/each}
       </div>
     </div>
-  {:else if ui_page == UiPage.MORE }
+  {:else if ui_page == UiPage.MORE}
     <div class='grid-container'>
-      <div class='score-card' on:click={ui_next_page}>
+      <div class='score-card' onclick={ui_next_page}>
 	<div>{ live_update($game.state.get_frame_time()) }</div>
 	<div>Frames ({$game.state.num_frames})</div>
 	<div>
@@ -357,7 +359,7 @@
 	<div class='card-button'>Edit</div>
       </div>
       {#each $game.state.get_players() as player (player.pid)}
-	<div class='score-card {ui_score_card_player_style(player)}' on:click={() => ui_click_player_more(player)}>
+	<div class='score-card {ui_score_card_player_style(player)}' onclick={() => ui_click_player_more(player)}>
 	  <div>{player.name}</div>
 	  <div>{player.frame_1st} - {player.frame_2nd} - {player.frame_3rd}</div>
 	  <div class='score-card-points'>{player.points}</div>
@@ -368,9 +370,9 @@
 	    <div>({player.last_break})</div>
 	    <div class='score-card-break unavailable'><Break balls={player._last_break}></Break></div>
 	  {/if}
-	  {#if $game.state.can_concede(player.pid) }
+	  {#if $game.state.can_concede(player.pid)}
 	    <div class='card-button'>Concede</div>
-	  {:else if $game.state.can_declare_winner(player.pid) }
+	  {:else if $game.state.can_declare_winner(player.pid)}
 	    <div class='card-button'>Set Winner</div>
 	  {:else}
 	    <div></div>
@@ -378,14 +380,14 @@
 	</div>
       {/each}
 
-      <div class='info-card' on:click={ui_new_frame}>
+      <div class='info-card' onclick={ui_new_frame}>
 	<div>Frame shot time</div>
 	<div>Frame balls</div>
 	<div>Frame high</div>
 	<div>Time since last pot</div>
 	<div>Game balls</div>
 	<div>Game high</div>
-	{#if $game.state.can_new_frame() }
+	{#if $game.state.can_new_frame()}
 	  <div class='card-button'>New frame</div>
 	{:else}
 	  <div></div>
@@ -404,7 +406,7 @@
     </div>
   {:else}
     <div class='grid-container'>
-      <div class='score-card' on:click={ui_next_page}>
+      <div class='score-card' onclick={ui_next_page}>
 	<div>{ live_update($game.state.get_frame_time()) }</div>
 	<div>Frames ({$game.state.num_frames})</div>
 	<div>
@@ -428,8 +430,8 @@
 	    <div class='score-card-break unavailable'><Break balls={player._last_break}></Break></div>
 	  {/if}
 	  <div class='double-button'>
-	    <div class='card-button' on:click={() => ui_player_edit_points(player.pid, -1)}>-</div>
-	    <div class='card-button' on:click={() => ui_player_edit_points(player.pid, 1)}>+</div>
+	    <div class='card-button' onclick={() => ui_player_edit_points(player.pid, -1)}>-</div>
+	    <div class='card-button' onclick={() => ui_player_edit_points(player.pid, 1)}>+</div>
 	  </div>
 	</div>
       {/each}

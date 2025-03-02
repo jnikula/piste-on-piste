@@ -1,15 +1,21 @@
 <!-- SPDX-License-Identifier: AGPL-3.0-or-later -->
 <!-- Copyright (c) 2022 Jani Nikula <jani@nikula.org> -->
 <script lang='ts'>
-  export let balls: number[];
+  import { run } from 'svelte/legacy';
+
   import { value_to_csscolor } from './ball-colors';
+  interface Props {
+    balls: number[];
+  }
 
-  let counts: number[];
-  let err: number;
+  let { balls }: Props = $props();
 
-  $: ball_counts = balls.length > 8;
+  let counts: number[] = $state();
+  let err: number = $state();
 
-  $: {
+  let ball_counts = $derived(balls.length > 8);
+
+  run(() => {
     counts = [0,0,0,0,0,0,0,0];
     err = 0;
 
@@ -19,7 +25,7 @@
       else
 	err = i;
     }
-  }
+  });
 </script>
 
 {#if ball_counts}

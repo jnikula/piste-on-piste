@@ -1,11 +1,15 @@
 {
   "extends": "@tsconfig/svelte/tsconfig.json",
-
+  "compilerOptions": {
+    "useDefineForClassFields": true,
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitReturns": true,
+    "strict": true,
+    "noUnusedLocals": true,
+    "strictNullChecks": false,
+    "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
+  },
   "include": ["src/**/*", "src/node_modules"],
   "exclude": ["node_modules/*", "__sapper__/*", "public/*"],
-
-  "forceConsistentCasingInFileNames": true,
-  "noImplicitReturns": true,
-  "strict": true,
-  "noUnusedLocals": true,
 }

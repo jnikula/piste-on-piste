@@ -21,7 +21,7 @@ app built from current main branch.
 
 .. _scoreboard app: https://jnikula.github.io/piste-on-piste/latest.html
 
-.. _development version: https://jnikula.github.io/piste-on-piste/testing
+.. _development version: https://jnikula.github.io/piste-on-piste/main
 
 License
 -------

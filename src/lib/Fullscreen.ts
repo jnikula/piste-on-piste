@@ -17,13 +17,13 @@ declare global {
 }
 
 export class Fullscreen {
-  _elem: Element;
+  private _elem: Element;
 
   constructor(elem: Element) {
     this._elem = elem;
   }
 
-  _enabled(): boolean {
+  private _enabled(): boolean {
     if (document.fullscreenElement)
       return true;
 
@@ -36,7 +36,7 @@ export class Fullscreen {
     return false;
   }
 
-  _enable(): void {
+  private _enable(): void {
     if (this._elem.requestFullscreen) {
       this._elem.requestFullscreen();
     } else if (this._elem.webkitRequestFullscreen) {
@@ -46,7 +46,7 @@ export class Fullscreen {
     }
   }
 
-  _disable(): void {
+  private _disable(): void {
     if (document.exitFullscreen) {
       document.exitFullscreen();
     } else if (document.webkitExitFullscreen) {
@@ -56,14 +56,14 @@ export class Fullscreen {
     }
   }
 
-  _set(enable: boolean): void {
+  private _set(enable: boolean): void {
     if (enable)
       this._enable();
     else
       this._disable();
   }
 
-  _save(enable: boolean): void {
+  private _save(enable: boolean): void {
     localStorage.setItem('piste-on-piste-fullscreen', JSON.stringify(enable));
   }
 
@@ -86,5 +86,3 @@ export class Fullscreen {
     this._save(enable);
   }
 }
-
-export default Fullscreen;

@@ -5,17 +5,19 @@
   import { value_to_csscolor } from './ball-colors.ts';
 
   interface Props {
+    title?: string;
     value: number;
-    action?: any;
     active: boolean;
+    action?: any;
     children?: Snippet;
   }
 
   let {
+    title = '',
     value,
-    action = () => {},
     active,
-    children
+    action = () => {},
+    children,
   }: Props = $props();
 
   let brightness: string = $derived(active ? '100%' : '50%')
@@ -26,7 +28,7 @@
   }
 </script>
 
-<div class='ball' style='--csscolor: {value_to_csscolor(value)}; --brightness: {brightness};' {onclick}>
+<div title='{title}' class='ball' style='--csscolor: {value_to_csscolor(value)}; --brightness: {brightness};' {onclick}>
   <div class='value'>{@render children?.()}</div>
 </div>
 

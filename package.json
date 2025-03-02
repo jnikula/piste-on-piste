@@ -10,12 +10,12 @@
     "check": "svelte-check --tsconfig ./tsconfig.json --compiler-warnings 'a11y-click-events-have-key-events:ignore'"
   },
   "devDependencies": {
-    "@sveltejs/vite-plugin-svelte": "^1.0.1",
+    "@sveltejs/vite-plugin-svelte": "^2.4.1",
     "@tsconfig/svelte": "^3.0.0",
-    "svelte": "^3.49.0",
-    "svelte-check": "^2.9.0",
-    "svelte-preprocess": "^4.10.7",
-    "typescript": "^4.8.2",
+    "svelte": "^4.0.0",
+    "svelte-check": "^3.4.3",
+    "svelte-preprocess": "^5.0.3",
+    "typescript": "^5.0.0",
     "vite": "^3.0.0"
   }
 }

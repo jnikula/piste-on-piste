@@ -17,7 +17,8 @@ def git_tags():
 def git_branches():
     cmd = ['git', 'branch', '--remotes', '--format=%(refname:short)']
 
-    return [branch.removeprefix('origin/') for branch in git(cmd) if branch != 'origin/HEAD']
+    return [branch.removeprefix('origin/') for branch in git(cmd)
+            if branch not in ['origin/HEAD', 'origin']]
 
 def main():
     parser = argparse.ArgumentParser()

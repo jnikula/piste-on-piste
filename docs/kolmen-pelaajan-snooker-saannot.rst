@@ -16,7 +16,7 @@ Kolmen pelaajan snooker-säännöt
 
 Tavallisten `snooker-sääntöjen`_ muunnelma kolmelle pelaajalle.
 
-.. _snooker-sääntöjen: https://snooker.sbil.fi/saannot/
+.. _snooker-sääntöjen: https://www.sbil.fi/snooker/saannot/
 
 .. contents:: Sisältö
 

@@ -22,6 +22,7 @@ export type SavedName = {
 
 export class Options {
   names: SavedName[] = $state([]);
+  num_reds: number = $state();
 
   constructor() {
     let names: SavedName[] = this._load();
@@ -35,6 +36,7 @@ export class Options {
     }
 
     this.names.splice(0, 3, ...names);
+    this.num_reds = 15;
   }
 
   shuffle(): void {

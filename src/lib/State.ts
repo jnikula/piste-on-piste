@@ -6,8 +6,6 @@ import { Options } from './Options.svelte.ts';
 import { Player } from './Player.ts';
 import type { SavedName } from './Options.svelte.ts';
 
-const MAX_BALLS: number = 15 + 6;
-
 const permutations = [
   [0, 1, 2],
   [1, 2, 0],
@@ -19,6 +17,7 @@ const permutations = [
 
 export class State {
   // game
+  private readonly max_balls: number;
   cur_perm: number = 0;
   num_frames: number = 0;
 
@@ -27,7 +26,7 @@ export class State {
   _start_timestamp: number = 0;
   _end_timestamp: number = 0;
   _shot_timestamp: number = 0;
-  _num_balls: number = MAX_BALLS;
+  _num_balls: number;
 
   cur_pos: number = 0;
   cur_pid: number = 0;
@@ -49,6 +48,11 @@ export class State {
 
   constructor(options: Options = null, source: Object = null) {
     let names: SavedName[] = options ? options.names : null;
+
+    if (options) {
+      this.max_balls = options.num_reds + 6;
+      this._num_balls = this.max_balls;
+    }
 
     // frame
     this.timestamp = Date.now()
@@ -520,7 +524,7 @@ export class State {
     this._start_timestamp = 0;
     this._end_timestamp = 0;
     this._shot_timestamp = 0;
-    this._num_balls = MAX_BALLS;
+    this._num_balls = this.max_balls;
 
     this.cur_pos = 0;
     this.cur_pid = 0; // updated below
@@ -541,7 +545,7 @@ export class State {
   }
 
   can_plus_balls(): boolean {
-    return this._num_balls < MAX_BALLS;
+    return this._num_balls < this.max_balls;
   }
 
   plus_balls(): void {

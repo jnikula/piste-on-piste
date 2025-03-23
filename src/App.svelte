@@ -66,7 +66,7 @@
     // Note: Fullscreen can only be entered via user interaction
     fullscreen.load();
 
-    game.new_game(options.names, savegame.new_game_slot());
+    game.new_game(options, savegame.new_game_slot());
 
     options.save();
 

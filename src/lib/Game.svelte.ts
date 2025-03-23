@@ -1,8 +1,9 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 // SPDX-FileCopyrightText: 2024 Jani Nikula <jani@nikula.org>
 
-import { State } from './State.ts';
+import { Options } from './Options.svelte.ts';
 import { SaveGame } from './SaveGame.svelte.ts';
+import { State } from './State.ts';
 
 export class Game {
   undo_stack: State[] = $state([]);
@@ -122,8 +123,8 @@ export class Game {
   }
 
   // FIXME: use real type
-  new_game(names: any[], slot: number): void {
-    this.undo_stack = [new State(names)];
+  new_game(options: Options, slot: number): void {
+    this.undo_stack = [new State(options.names)];
     this.undo_index = 0;
     this.save_game_slot = slot;
     // Note: Don't autosave before first shot

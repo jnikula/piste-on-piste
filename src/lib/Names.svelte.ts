@@ -1,16 +1,15 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 // SPDX-FileCopyrightText: 2024 Jani Nikula <jani@nikula.org>
 
-import { writable } from 'svelte/store';
-
 function shuffle(array: any[]): any[] {
+  let input: any[] = [...array];
   let result: any[] = [];
 
-  while (array.length) {
-    let index: number = Math.floor(Math.random() * array.length);
+  while (input.length) {
+    let index: number = Math.floor(Math.random() * input.length);
 
-    result.push(array[index]);
-    array.splice(index, 1);
+    result.push(input[index]);
+    input.splice(index, 1);
   }
 
   return result;
@@ -22,24 +21,26 @@ type SavedName = {
 };
 
 class Names {
-  names: SavedName[];
+  names: SavedName[] = $state([]);
 
   constructor() {
     let names: SavedName[] = this._load();
 
     if (names) {
-      this.names = shuffle(names);
+      names = shuffle(names);
     } else {
       names = [];
       for (let i of [1,2,3])
 	names.push({ id: i, name: `Player ${i}`});
-
-      this.names = names;
     }
+
+    this.names.splice(0, 3, ...names);
   }
 
-  _shuffle(): void {
-    this.names = shuffle(this.names);
+  shuffle(): void {
+    let names: SavedName[] = shuffle(this.names);
+
+    this.names.splice(0, 3, ...names);
   }
 
   // load names from local storage
@@ -60,7 +61,7 @@ class Names {
     }
   }
 
-  _save(): void {
+  save(): void {
     localStorage.setItem('piste-on-piste-names', JSON.stringify(this.names));
   }
 
@@ -82,16 +83,4 @@ class Names {
   }
 }
 
-function create_names(_names: Names) {
-  let { set, update, subscribe } = writable(_names);
-
-  return {
-    set,
-    update,
-    subscribe,
-    save: () => update((val) => { val._save(); return val; }),
-    shuffle: () => update((val) => { val._shuffle(); return val; }),
-  };
-}
-
-export const names = create_names(new Names());
+export const names = $state(new Names());

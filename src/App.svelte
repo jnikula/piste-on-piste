@@ -8,10 +8,10 @@
   import * as timeutil from './lib/time-util.ts';
   import Ball from './lib/Ball.svelte';
   import Break from './lib/Break.svelte';
-  import { game } from './lib/Game.ts';
+  import { game } from './lib/Game.svelte';
   import { names } from './lib/Names.svelte';
   import type Player from './lib/Player.ts';
-  import type { SaveGameId } from './lib/Game.ts';
+  import type { SaveGameId } from './lib/Game.svelte';
 
   let fullscreen: Fullscreen = new Fullscreen(document.documentElement);
 

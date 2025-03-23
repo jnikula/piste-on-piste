@@ -10,7 +10,7 @@
   import Break from './lib/Break.svelte';
   import { Game } from './lib/Game.svelte';
   import { Names } from './lib/Names.svelte';
-  import type Player from './lib/Player.ts';
+  import type { Player } from './lib/Player.ts';
   import type { SaveGameId } from './lib/Game.svelte';
 
   const names: Names = $state(new Names());

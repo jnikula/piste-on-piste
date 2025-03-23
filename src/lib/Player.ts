@@ -3,7 +3,7 @@
 
 import * as timeutil from './time-util.ts';
 
-class Player {
+export class Player {
   // game
   readonly pid: number;
   readonly name: string;
@@ -129,5 +129,3 @@ class Player {
       return this.pos - other.pos;
   }
 };
-
-export default Player;

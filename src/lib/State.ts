@@ -15,7 +15,7 @@ const permutations = [
   [2, 1, 0]
 ]
 
-class State {
+export class State {
   // game
   cur_perm: number = 0;
   num_frames: number = 0;
@@ -591,5 +591,3 @@ class State {
     p.points = p.points + amount;
   }
 }
-
-export default State;

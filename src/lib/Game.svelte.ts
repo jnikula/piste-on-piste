@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 // SPDX-FileCopyrightText: 2024 Jani Nikula <jani@nikula.org>
 
-import State from './State.ts';
+import { State } from './State.ts';
 
 export type SaveGameId = {
   slot: number;

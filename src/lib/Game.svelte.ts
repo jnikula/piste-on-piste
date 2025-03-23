@@ -8,7 +8,7 @@ export type SaveGameId = {
   timestamp: number;
 };
 
-class Game {
+export class Game {
   undo_stack: State[] = $state([]);
   undo_index: number = $state(-1);
   _save_game_slot: number = $state(0);
@@ -167,5 +167,3 @@ class Game {
     // Note: Don't autosave before first shot
   }
 };
-
-export const game = $state(new Game());

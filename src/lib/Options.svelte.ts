@@ -20,7 +20,7 @@ type SavedName = {
   name: string;
 };
 
-export class Names {
+export class Options {
   names: SavedName[] = $state([]);
 
   constructor() {

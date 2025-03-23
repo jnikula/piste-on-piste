@@ -7,12 +7,12 @@
   import Ball from './lib/Ball.svelte';
   import Break from './lib/Break.svelte';
   import { Game } from './lib/Game.svelte';
-  import { Names } from './lib/Names.svelte';
+  import { Options } from './lib/Options.svelte.ts';
   import { SaveGame } from './lib/SaveGame.svelte';
   import type { Player } from './lib/Player.ts';
   import type { SaveGameId } from './lib/SaveGame.svelte';
 
-  const names: Names = $state(new Names());
+  const options: Options = $state(new Options());
 
   const savegame: SaveGame = $state(new SaveGame());
 
@@ -54,21 +54,21 @@
 
     game.load(save_game.slot);
 
-    names.save();
+    options.save();
 
     ui_page = UiPage.PLAY;
   }
 
   function ui_new_game(): void {
-    if (!names.can_new_game())
+    if (!options.can_new_game())
       return;
 
     // Note: Fullscreen can only be entered via user interaction
     fullscreen.load();
 
-    game.new_game(names.names, savegame.new_game_slot());
+    game.new_game(options.names, savegame.new_game_slot());
 
-    names.save();
+    options.save();
 
     ui_page = UiPage.PLAY;
   }
@@ -135,7 +135,7 @@
   }
 
   function ui_name_input_card_style(name: string): string {
-    return names.valid_name(name) ? '' : 'retake'; // FIXME
+    return options.valid_name(name) ? '' : 'retake'; // FIXME
   }
 
   // UI key events
@@ -235,7 +235,7 @@
   {#if ui_page == UiPage.START}
 
     <div class='grid-container'>
-      <div class='name-input-card' onclick={() => names.shuffle()}>
+      <div class='name-input-card' onclick={() => options.shuffle()}>
 	<div>Enter names</div>
 	<div></div>
 	<div></div>
@@ -244,13 +244,13 @@
 	<div></div>
 	<div class='card-button'>Shuffle</div>
       </div>
-      {#each names.names as player_name (player_name.id)}
+      {#each options.names as player_name (player_name.id)}
 	<div class='name-input-card {ui_name_input_card_style(player_name.name)}' animate:flip='{{ duration: (d) => d * 2 }}'>
 	  <input class='name-input' size=9 minlength=1 maxlength=10 placeholder='enter name' bind:value='{player_name.name}'/>
 	</div>
       {/each}
 
-      <div class='info-card {names.can_new_game() ? "" : "unavailable"}' onclick={ui_new_game}>
+      <div class='info-card {options.can_new_game() ? "" : "unavailable"}' onclick={ui_new_game}>
 	<div class='info-card-copyright' onclick={(e) => e.stopPropagation()}><a href="https://jnikula.github.io/piste-on-piste/">&copy; 2022-2024 Jani Nikula<br>License: AGPL 3.0 or later &#x1f517;</a></div>
 	<div></div>
 	<div>Piste</div>

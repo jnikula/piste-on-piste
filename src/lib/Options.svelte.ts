@@ -15,7 +15,7 @@ function shuffle(array: any[]): any[] {
   return result;
 }
 
-type SavedName = {
+export type SavedName = {
   id: number;
   name: string;
 };

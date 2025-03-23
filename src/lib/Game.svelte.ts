@@ -19,10 +19,10 @@ export class Game {
   }
 
   constructor() {
-    this._read_saved_games();
+    this.saved_games = this._read_saved_games();
   }
 
-  _read_saved_games(): void {
+  _read_saved_games(): SaveGameId[] {
     let saved: SaveGameId[] = [];
 
     for (let slot of [0,1,2]) {
@@ -43,7 +43,7 @@ export class Game {
     // save new game in the oldest slot
     this._save_game_slot = saved[saved.length - 1].slot;
 
-    this.saved_games = saved;
+    return saved;
   }
 
   save_game_name(): string {

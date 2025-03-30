@@ -45,9 +45,9 @@
     -webkit-filter: brightness(var(--brightness)); /* https://caniuse.com/css-filters */
   }
   .value {
-    text-shadow: 2px 2px black;
+    text-shadow: 2px 2px 6px black;
     color: white;
     text-align: center;
-    font-size: 150%;
+    font-size: 175%;
   }
 </style>

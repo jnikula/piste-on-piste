@@ -69,7 +69,11 @@ jobs:
       - run: mv docs-artifact/* .
       - run: |
           latest=${{ needs.configure.outputs.latest }}
-          echo "<meta http-equiv=\"refresh\" content=\"0; url=$latest\" />" > latest.html
+          echo "<meta http-equiv='Refresh' content='0; url=$latest'/>" > latest.html
+          echo "<meta http-equiv='Cache-Control' content='no-cache, no-store, must-revalidate'/>" >> latest.html
+          echo "<meta http-equiv='Pragma' content='no-cache'/>" >> latest.html
+          echo "<meta http-equiv='Expires' content='0'/>" >> latest.html
+          cat latest.html
       - run: find
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3

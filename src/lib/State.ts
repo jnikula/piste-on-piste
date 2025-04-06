@@ -38,7 +38,7 @@ export class State {
 
   players: Player[] = [];
 
-  _copy(source: Object): void {
+  private copy(source: Object): void {
     // this will override players
     Object.assign(this, source);
 
@@ -47,12 +47,17 @@ export class State {
   }
 
   constructor(options: Options = null, source: Object = null) {
-    let names: SavedName[] = options ? options.names : null;
-
-    if (options) {
-      this.max_balls = options.num_reds + 6;
-      this._num_balls = this.max_balls;
+    if (source) {
+      this.copy(source);
+      return;
     }
+
+    console.assert(options != null);
+
+    let names: SavedName[] = options.names;
+
+    this.max_balls = options.num_reds + 6;
+    this._num_balls = this.max_balls;
 
     // frame
     this.timestamp = Date.now()
@@ -74,9 +79,6 @@ export class State {
 
       this.players.push(p)
     }
-
-    if (source)
-      this._copy(source);
   }
 
   deepcopy(): State {

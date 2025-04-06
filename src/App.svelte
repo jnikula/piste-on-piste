@@ -235,14 +235,14 @@
   {#if ui_page == UiPage.START}
 
     <div class='grid-container'>
-      <div class='name-input-card' onclick={() => options.shuffle()}>
+      <div class='name-input-card'>
 	<div>Enter names</div>
 	<div></div>
 	<div></div>
 	<div></div>
 	<div></div>
-	<div></div>
-	<div class='card-button'>Shuffle</div>
+	<div>Random order</div>
+	<div><input type="range" bind:value={options.randomize} min="0" max="1"></div>
       </div>
       {#each options.names as player_name (player_name.id)}
 	<div class='name-input-card {ui_name_input_card_style(player_name.name)}' animate:flip='{{ duration: (d) => d * 2 }}'>

@@ -6,6 +6,20 @@ import { Options } from './Options.svelte.ts';
 import { Player } from './Player.ts';
 import type { SavedName } from './Options.svelte.ts';
 
+function shuffle(array: any[]): any[] {
+  let input: any[] = [...array];
+  let result: any[] = [];
+
+  while (input.length) {
+    let index: number = Math.floor(Math.random() * input.length);
+
+    result.push(input[index]);
+    input.splice(index, 1);
+  }
+
+  return result;
+}
+
 const permutations = [
   [0, 1, 2],
   [1, 2, 0],
@@ -55,6 +69,9 @@ export class State {
     console.assert(options != null);
 
     let names: SavedName[] = options.names;
+
+    if (options.randomize)
+      names = shuffle(names);
 
     this.max_balls = options.num_reds + 6;
     this._num_balls = this.max_balls;

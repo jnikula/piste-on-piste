@@ -1,20 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 // SPDX-FileCopyrightText: 2024 Jani Nikula <jani@nikula.org>
 
-function shuffle(array: any[]): any[] {
-  let input: any[] = [...array];
-  let result: any[] = [];
-
-  while (input.length) {
-    let index: number = Math.floor(Math.random() * input.length);
-
-    result.push(input[index]);
-    input.splice(index, 1);
-  }
-
-  return result;
-}
-
 export type SavedName = {
   id: number;
   name: string;
@@ -23,13 +9,12 @@ export type SavedName = {
 export class Options {
   names: SavedName[] = $state([]);
   num_reds: number = $state();
+  randomize: number = $state(1);
 
   constructor() {
     let names: SavedName[] = this._load();
 
-    if (names) {
-      names = shuffle(names);
-    } else {
+    if (!names) {
       names = [];
       for (let i of [1,2,3])
 	names.push({ id: i, name: `Player ${i}`});
@@ -37,12 +22,6 @@ export class Options {
 
     this.names.splice(0, 3, ...names);
     this.num_reds = 15;
-  }
-
-  shuffle(): void {
-    let names: SavedName[] = shuffle(this.names);
-
-    this.names.splice(0, 3, ...names);
   }
 
   // load names from local storage

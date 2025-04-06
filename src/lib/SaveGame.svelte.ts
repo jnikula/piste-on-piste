@@ -6,6 +6,7 @@ import { State } from './State.ts';
 export type SaveGameId = {
   slot: number;
   timestamp: number;
+  version: string;
 };
 
 export class SaveGame {
@@ -20,14 +21,16 @@ export class SaveGame {
 
     for (let slot of [0,1,2]) {
       let timestamp: number = 0;
+      let version: string = "";
       let json: string = localStorage.getItem(SaveGame.save_game_name(slot));
 
       if (json) {
 	let source = JSON.parse(json);
 	timestamp = source[0].timestamp; // first frame start time
+	version = source[0].version;
       }
 
-      saved.push({ slot: slot, timestamp: timestamp });
+      saved.push({ slot: slot, timestamp: timestamp, version: version });
     }
 
     // newest to oldest, with unused (timestamp 0) being oldest

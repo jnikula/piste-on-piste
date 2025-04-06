@@ -5,6 +5,7 @@ import * as timeutil from './time-util.ts';
 import { Options } from './Options.svelte.ts';
 import { Player } from './Player.ts';
 import type { SavedName } from './Options.svelte.ts';
+import { version } from '../../package.json';
 
 function shuffle(array: any[]): any[] {
   let input: any[] = [...array];
@@ -34,6 +35,7 @@ export class State {
   private readonly max_balls: number;
   cur_perm: number = 0;
   num_frames: number = 0;
+  version: string = version;
 
   // frame
   timestamp: number;

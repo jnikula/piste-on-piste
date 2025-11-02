@@ -1,6 +1,10 @@
 Piste on Piste
 ==============
 
+**Note:** The project has moved to
+<https://github.com/groovescore/piste-on-piste>, with the app deployed at
+<https://pop.groovescore.app>.
+
 If you're looking for a new take on **three-player snooker rules**, and a
 **scoreboard app** to go with them, you've found the right place.
 

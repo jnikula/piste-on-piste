@@ -1,6 +1,10 @@
 Three-Player Snooker Rules and Scoreboard App
 =============================================
 
+**Note:** The project has moved to
+<https://github.com/groovescore/piste-on-piste>, with the app deployed at
+<https://pop.groovescore.app>.
+
 This project contains special snooker rule adaptation for three players, and a
 scoreboard app Piste on Piste [*]_ for the rules.
 
